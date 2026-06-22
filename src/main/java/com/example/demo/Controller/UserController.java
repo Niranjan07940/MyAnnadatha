@@ -7,14 +7,17 @@ import com.example.demo.Repository.UserRepository;
 import com.example.demo.Service.OtpService;
 import com.example.demo.Service.UserService;
 import com.example.demo.Utility.JwtUtility;
+import jakarta.mail.Multipart;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,9 +39,11 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping("/auth/signup")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@ModelAttribute User user, @RequestPart("file")MultipartFile file) throws Exception {
+        user.setProfileUrl(userService.uploadImage(file));
         User savedUser=userService.register(user);
         Map<String,Object> map=new HashMap<>();
+
         try{
             if(savedUser!=null){
                 return new ResponseEntity<>(savedUser,HttpStatus.OK);
@@ -70,19 +75,20 @@ public class UserController {
     public String test(){
         return "This is sample";
     }
-    @GetMapping("/oauth/login")
-    public void login(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/oauth2/authorization/google");
-    }
+    
+        @GetMapping("/oauth/login")
+        public void login(HttpServletResponse response) throws IOException {
+            response.sendRedirect("/oauth2/authorization/google");
+        }
 
     @PostMapping("auth/otpSignIn")
     public ResponseEntity<?> otpSignIn(@RequestBody User user){
         String message="";
         Map<String,Object> map = new HashMap<>();
-
         try{
             String otp = otpService.generateOtp(user.getPhoneNumber().toString());
             otpService.sendOtp(user.getPhoneNumber().toString(), otp);
+            message="OTP sent successfully";
         }
         catch(Exception e){
             message=e.getMessage();
@@ -105,6 +111,7 @@ public class UserController {
         if(isValid){
             message = jwtUtility.generateToken(user.getUsername());
             map.put("message",message);
+            System.out.println(message);
             return new ResponseEntity<>(map,HttpStatus.OK);
         }
         map.put("message","Invalid Otp");
@@ -127,4 +134,6 @@ public class UserController {
         map.put("message",message);
         return new ResponseEntity<>(map,HttpStatus.OK);
     }
+
+
 }

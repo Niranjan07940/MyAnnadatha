@@ -47,7 +47,6 @@ public class OauthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                                           //for business purpose they need local use in DB.
         }
         System.out.println(name+" "+email);
-
         String jwt = jwtUtility.generateToken(name);
 
 

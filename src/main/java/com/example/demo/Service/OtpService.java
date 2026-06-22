@@ -38,7 +38,7 @@ public class OtpService {
 
     public String generateOtp(String identifier) {
         SecureRandom random = new SecureRandom();
-        int otpCode = 100000 + random.nextInt(999999);
+        int otpCode = 100000 + random.nextInt(899999);
         String otpStr = String.valueOf(otpCode);
         System.out.println("otpStr: " + otpStr);
         redisTemplate.opsForValue().set(OTP_PREFIX + identifier, otpStr, EXPIRE_MINUTES, TimeUnit.MINUTES);
