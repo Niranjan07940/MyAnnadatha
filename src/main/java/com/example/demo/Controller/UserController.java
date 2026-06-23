@@ -7,12 +7,10 @@ import com.example.demo.Repository.UserRepository;
 import com.example.demo.Service.OtpService;
 import com.example.demo.Service.UserService;
 import com.example.demo.Utility.JwtUtility;
-import jakarta.mail.Multipart;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,7 +41,6 @@ public class UserController {
         user.setProfileUrl(userService.uploadImage(file));
         User savedUser=userService.register(user);
         Map<String,Object> map=new HashMap<>();
-
         try{
             if(savedUser!=null){
                 return new ResponseEntity<>(savedUser,HttpStatus.OK);
