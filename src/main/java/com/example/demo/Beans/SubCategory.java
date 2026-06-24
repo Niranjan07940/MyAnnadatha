@@ -14,7 +14,7 @@ public class SubCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     private String itemName;
-    private Integer quantity;
+
 
     @ManyToOne
     @JoinColumn(name="categories_id")
