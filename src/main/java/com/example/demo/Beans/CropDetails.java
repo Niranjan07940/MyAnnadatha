@@ -12,7 +12,7 @@ public class CropDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    private Integer cropQuantity;
+    private Double cropQuantity;
     private Double cropPrice;
 
     @ManyToOne

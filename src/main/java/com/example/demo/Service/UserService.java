@@ -16,6 +16,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Service
@@ -34,8 +35,10 @@ public class UserService {
     }
 
     public User resetPassword(User user) {
+        System.out.println(user.getPassword());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        System.out.println(user.getPassword());
         user.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
         return userRepository.save(user);
     }
@@ -45,6 +48,17 @@ public class UserService {
                 "resource_type", "auto"
         ));
         return uploadResult.get("secure_url").toString();
+
+    }
+
+    public User updateUser(User user) {
+        user.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        return userRepository.save(user);
+    }
+
+    public Optional<?> getUser(Long id) {
+        Optional<User> user=userRepository.findById(id);
+        return user;
 
     }
 }
