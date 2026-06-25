@@ -2,6 +2,10 @@ package com.example.demo.Controller;
 
 import com.example.demo.Beans.User;
 import com.example.demo.Service.UserService;
+import com.example.demo.Utility.JwtUtility;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -19,6 +23,11 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtUtility jwtUtility;
+
+
 
     @PostMapping("/user/updateWithProfile")
     public ResponseEntity<?> updateProfile(@ModelAttribute User user, @RequestPart("file") MultipartFile file) throws Exception{
@@ -61,23 +70,25 @@ public class UserController {
     }
 
     @GetMapping("/greetMessage")
-    public ResponseEntity<?> greetMessage(){
+    public ResponseEntity<?> greetMessage(HttpServletRequest request,HttpServletResponse response){
+        Long userId=jwtUtility.getUserId(request.getHeader("Authorization").substring(7));
+        User user=userService.getUserDetails(userId);
         Map<String,Object> map = new HashMap<>();
         LocalTime currentTime=LocalTime.now();
         System.out.println(currentTime);
         if(currentTime.isBefore(LocalTime.NOON)){
-            map.put("message","Good Morning!");
+            map.put("message","Good Morning, "+user.getUsername());
             return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
         }
         else if(currentTime.isBefore(LocalTime.of(17,0))){
-            map.put("message","Good AfterNoon!");
+            map.put("message","Good AfterNoon, "+user.getUsername());
             return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
         }
-        else if(currentTime.isBefore(LocalTime.of(9,0))){
-            map.put("message","Good Evening!");
+        else if(currentTime.isBefore(LocalTime.of(21,0))){
+            map.put("message","Good Evening, "+user.getUsername());
             return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
         }
-        map.put("message","Good Night!");
+        map.put("message","Good Night, "+user.getUsername());
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
     }
 

@@ -23,8 +23,7 @@ public class User{
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "user")
-    private List<CropDetails> cropDetails;
+
 
 
 }

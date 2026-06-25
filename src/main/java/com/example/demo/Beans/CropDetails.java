@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -17,6 +18,8 @@ public class CropDetails {
     private Double cropQuantity;
     private Double cropPrice;
     private List<String> imageUrls;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     @ManyToOne
     @JoinColumn(name="user_id")

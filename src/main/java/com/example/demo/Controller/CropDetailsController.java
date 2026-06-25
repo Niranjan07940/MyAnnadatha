@@ -3,8 +3,8 @@ package com.example.demo.Controller;
 import com.example.demo.Beans.CropDetails;
 import com.example.demo.DTO.CropRequest;
 import com.example.demo.Service.CropDetailsService;
-import jakarta.mail.Multipart;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,24 +21,40 @@ public class CropDetailsController {
     @Autowired
     private CropDetailsService cropDetailsService;
 
-    @PostMapping("/crop/addCrop")
-    public ResponseEntity<?> uploadCropDetails(@ModelAttribute("request") CropRequest cropRequest, @RequestPart("files")List<MultipartFile> multipartFiles) throws Exception {
-        Map<String,Object> map = new HashMap<>();
-        List<String> listImages=new ArrayList<>();
-        for(MultipartFile file:multipartFiles){
-          listImages.add(cropDetailsService.uploadImage(file));
-        }
-        cropRequest.setImages(listImages);
-        try{
-            CropDetails cropDetails=cropDetailsService.uploadCrop(cropRequest);
-            if(cropDetails!=null){
-                return new ResponseEntity<>(cropDetails, HttpStatusCode.valueOf(200));
+        @PostMapping("/crop/addCrop")
+        public ResponseEntity<?> uploadCropDetails(@ModelAttribute("request") CropRequest cropRequest, @RequestPart("files")List<MultipartFile> multipartFiles) throws Exception {
+            Map<String,Object> map = new HashMap<>();
+            List<String> listImages=new ArrayList<>();
+            for(MultipartFile file:multipartFiles){
+              listImages.add(cropDetailsService.uploadImage(file));
             }
+            cropRequest.setImages(listImages);
+            try{
+                CropDetails cropDetails=cropDetailsService.uploadCrop(cropRequest);
+                if(cropDetails!=null){
+                    return new ResponseEntity<>(cropDetails, HttpStatusCode.valueOf(200));
+                }
+            }
+            catch(Exception e){
+                map.put("message",e.getMessage());
+            }
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
         }
-        catch(Exception e){
-            map.put("message",e.getMessage());
+
+
+        @GetMapping("/crop/getFreshCrops")
+        public ResponseEntity<?> getFreshCropDetails(@RequestParam("page")int page){
+            Map<String,Object> map = new HashMap<>();
+            try{
+                Page<CropDetails> cropDetails=cropDetailsService.getCrops(page,10);
+                if(!cropDetails.isEmpty()){
+                    return new ResponseEntity<>(cropDetails,HttpStatusCode.valueOf(200));
+                }
+            }
+            catch(Exception e){
+                map.put("message",e.getMessage());
+            }
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
         }
-        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
-    }
 
 }
