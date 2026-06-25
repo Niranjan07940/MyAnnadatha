@@ -18,7 +18,6 @@ public class Units {
     @Column(unique = true,nullable = false)
     private String unit;
 
-    @OneToMany(mappedBy = "units")
-    private List<SubCategory> subCategories;
+
 
 }

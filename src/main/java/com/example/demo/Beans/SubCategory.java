@@ -28,7 +28,5 @@ public class SubCategory {
     @JoinColumn(name="unit_id")
     private Units units;
 
-    @OneToMany(mappedBy = "subCategory")
-    private List<CropDetails> cropDetails;
 
 }
