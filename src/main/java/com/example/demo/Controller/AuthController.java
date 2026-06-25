@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,20 +57,21 @@ public class AuthController {
     public ResponseEntity<?> loginUser(@RequestBody User user) {
         String message="";
         Map<String,Object> map = new HashMap<>();
+        User u;
         try{
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
-            message=jwtUtility.generateToken(user.getUsername());
-            map.put("message",message);
-            System.out.println(message);
-            return new  ResponseEntity<>(map, HttpStatus.OK);
+            Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
+            if(authentication.isAuthenticated()){
+                u=userRepository.findUserByEmail(user.getEmail());
+                message=jwtUtility.generateToken(u);
+                map.put("message",message);
+                return new  ResponseEntity<>(map, HttpStatus.OK);
+            }
         }
         catch(Exception e){
-            e.printStackTrace();
             message=e.getMessage();
             map.put("message",message);
-
-            return new  ResponseEntity<>(map, HttpStatusCode.valueOf(404));
         }
+        return new  ResponseEntity<>(map, HttpStatusCode.valueOf(404));
     }
     @GetMapping("/getMessage")
     public String test(){
@@ -109,7 +111,7 @@ public class AuthController {
             isValid = otpService.validateOtp(phoneNumber, otp);
         }
         if(isValid){
-            message = jwtUtility.generateToken(user.getUsername());
+            message = jwtUtility.generateToken(user);
             map.put("message",message);
             System.out.println(message);
             return new ResponseEntity<>(map,HttpStatus.OK);

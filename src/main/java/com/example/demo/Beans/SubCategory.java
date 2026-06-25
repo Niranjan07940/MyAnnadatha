@@ -1,5 +1,6 @@
 package com.example.demo.Beans;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,9 @@ public class SubCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
+
+
+    @Column(unique = true,nullable = false)
     private String itemName;
 
 

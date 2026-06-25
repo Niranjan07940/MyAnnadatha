@@ -5,6 +5,7 @@ import com.example.demo.Filter.JwtFilter;
 import com.example.demo.Service.CustomUserDetailsService;
 import com.example.demo.Utility.OauthFailureHandler;
 import com.example.demo.Utility.OauthSuccessHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,9 +41,16 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth->auth.requestMatchers("/auth/**","/oauth2/**",
-                                "/otpSignIn","/ValidateOtp").permitAll()
+                .authorizeHttpRequests(auth->auth.requestMatchers("/auth/**","/oauth/**","/greetMessage").permitAll()
                         .anyRequest().authenticated())
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"error\":\"Unauthorized\"}");
+                        })
+                )
+
                         .oauth2Login(oauth->oauth
                                 .successHandler(oauthSuccessHandler)
                                 .failureHandler(oauthFailureHandler));

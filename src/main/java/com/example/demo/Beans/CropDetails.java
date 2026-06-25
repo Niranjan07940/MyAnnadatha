@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -14,6 +16,7 @@ public class CropDetails {
     private Long Id;
     private Double cropQuantity;
     private Double cropPrice;
+    private List<String> imageUrls;
 
     @ManyToOne
     @JoinColumn(name="user_id")

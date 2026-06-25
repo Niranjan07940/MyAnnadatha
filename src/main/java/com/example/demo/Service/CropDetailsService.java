@@ -1,6 +1,8 @@
 package com.example.demo.Service;
 
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.demo.Beans.*;
 import com.example.demo.DTO.CropRequest;
 import com.example.demo.Repository.*;
@@ -8,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -20,6 +24,9 @@ public class CropDetailsService {
     private UserRepository userRepository;
     @Autowired
     private CropDetailsRepository cropDetailsRepository;
+
+    @Autowired
+    private Cloudinary cloudinary;
 
 
     public CropDetails uploadCrop(CropRequest cropRequest){
@@ -33,4 +40,10 @@ public class CropDetailsService {
     }
 
 
+    public String uploadImage(MultipartFile file) throws Exception{
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
+                "resource_type", "auto"
+        ));
+        return uploadResult.get("secure_url").toString();
+    }
 }
