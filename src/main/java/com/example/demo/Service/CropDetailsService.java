@@ -43,7 +43,6 @@ public class CropDetailsService {
         cropDetails.setImageUrls(cropRequest.getImages());
         cropDetails.setSubCategory(subCategoryRepository.findSubCategoryById(cropRequest.getItemId()));
         cropDetails.setUser(userRepository.findUserById(cropRequest.getUserId()));
-        cropDetails.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         return cropDetailsRepository.save(cropDetails);
 
     }
@@ -66,4 +65,6 @@ public class CropDetailsService {
         return cropDetailsRepository.findAll(pageable);
 
     }
+
+
 }

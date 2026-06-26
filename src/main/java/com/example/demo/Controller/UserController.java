@@ -1,11 +1,12 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Beans.Favourites;
 import com.example.demo.Beans.User;
 import com.example.demo.Service.UserService;
 import com.example.demo.Utility.JwtUtility;
+import com.twilio.http.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -70,7 +72,7 @@ public class UserController {
     }
 
     @GetMapping("/greetMessage")
-    public ResponseEntity<?> greetMessage(HttpServletRequest request,HttpServletResponse response){
+    public ResponseEntity<?> greetMessage(HttpServletRequest request ){
         Long userId=jwtUtility.getUserId(request.getHeader("Authorization").substring(7));
         User user=userService.getUserDetails(userId);
         Map<String,Object> map = new HashMap<>();
@@ -91,5 +93,40 @@ public class UserController {
         map.put("message","Good Night, "+user.getUsername());
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
     }
+
+    @PostMapping("/like/uploadLike")
+    public ResponseEntity<?> uploadLikeForUser(@RequestBody Favourites favourites){
+        Map<String,Object> map = new HashMap<>();
+        try{
+            Favourites fav=userService.uploadLikes(favourites);
+            System.out.println(fav.getBuyer().getUsername());
+            if(fav!=null){
+                return new ResponseEntity<>(fav,HttpStatusCode.valueOf(200));
+            }
+        }
+        catch(Exception e){
+            map.put("messsage",e.getMessage());
+        }
+        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+
+    }
+
+    @GetMapping("/like/getLikes")
+    public ResponseEntity<?> getLikesForUser(@RequestParam("farmerId") Long farmerId){
+        Map<String,Object> map= new HashMap<>();
+        try{
+            List<Favourites> favourites=userService.getAllLikedUsers(farmerId);
+            if(!favourites.isEmpty()){
+                return new ResponseEntity<>(favourites,HttpStatusCode.valueOf(200));
+            }
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+        }
+        map.put("message","No users have liked this farmer.");
+        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
+
+
 
 }

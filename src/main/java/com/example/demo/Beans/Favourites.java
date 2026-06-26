@@ -1,6 +1,5 @@
 package com.example.demo.Beans;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,18 +7,23 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
-import java.util.List;
+
 
 @Getter
 @Setter
 @Entity
-public class CropDetails {
+public class Favourites {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
-    private Double cropQuantity;
-    private Double cropPrice;
-    private List<String> imageUrls;
+
+    @ManyToOne
+    @JoinColumn(name="buyer_id")
+    private User buyer;
+
+    @ManyToOne
+    @JoinColumn(name="farmer_id")
+    private User farmer;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -27,14 +31,4 @@ public class CropDetails {
 
     @UpdateTimestamp
     private Timestamp updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name="subCategory_id")
-    private SubCategory subCategory;
-
 }
-
