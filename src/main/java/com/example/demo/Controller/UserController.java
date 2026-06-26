@@ -4,16 +4,13 @@ import com.example.demo.Beans.Favourites;
 import com.example.demo.Beans.User;
 import com.example.demo.Service.UserService;
 import com.example.demo.Utility.JwtUtility;
-import com.twilio.http.Response;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
@@ -25,11 +22,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private JwtUtility jwtUtility;
-
-
 
     @PostMapping("/user/updateWithProfile")
     public ResponseEntity<?> updateProfile(@ModelAttribute User user, @RequestPart("file") MultipartFile file) throws Exception{
@@ -37,14 +31,10 @@ public class UserController {
         User savedUser=userService.register(user);
         Map<String,Object> map=new HashMap<>();
         try{
-            if(savedUser!=null){
-                return new ResponseEntity<>(savedUser, HttpStatus.OK);
-            }
-        }
-        catch(Exception e){
+            if(savedUser!=null)return new ResponseEntity<>(savedUser, HttpStatus.OK);
+        }catch(Exception e){
             map.put("message",e.getMessage());
-        }
-        return new ResponseEntity<>(map, HttpStatusCode.valueOf(400));
+        }return new ResponseEntity<>(map, HttpStatusCode.valueOf(400));
     }
 
     @PostMapping("/user/updateProfile")
@@ -53,20 +43,16 @@ public class UserController {
         try{
             User updateUser=userService.updateUser(user);
             return new ResponseEntity<>(updateUser,HttpStatusCode.valueOf(200));
-        }
-        catch(Exception e){
+        }catch(Exception e){
             map.put("message",e.getMessage());
-        }
-        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
     @PostMapping("/user/getUser")
     public ResponseEntity<?> getProfile(@RequestParam("id") Long id){
         Map<String, Object> map = new HashMap<>();
         Optional<?> user=userService.getUser(id);
-        if(user.isPresent()){
-            return new ResponseEntity<>(user,HttpStatusCode.valueOf(200));
-        }
+        if(user.isPresent())return new ResponseEntity<>(user,HttpStatusCode.valueOf(200));
         map.put("message", "user not found");
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
@@ -81,16 +67,13 @@ public class UserController {
         if(currentTime.isBefore(LocalTime.NOON)){
             map.put("message","Good Morning, "+user.getUsername());
             return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
-        }
-        else if(currentTime.isBefore(LocalTime.of(17,0))){
+        }else if(currentTime.isBefore(LocalTime.of(17,0))){
             map.put("message","Good AfterNoon, "+user.getUsername());
             return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
-        }
-        else if(currentTime.isBefore(LocalTime.of(21,0))){
+        }else if(currentTime.isBefore(LocalTime.of(21,0))){
             map.put("message","Good Evening, "+user.getUsername());
             return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
-        }
-        map.put("message","Good Night, "+user.getUsername());
+        }map.put("message","Good Night, "+user.getUsername());
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
     }
 
@@ -99,34 +82,22 @@ public class UserController {
         Map<String,Object> map = new HashMap<>();
         try{
             Favourites fav=userService.uploadLikes(favourites);
-            System.out.println(fav.getBuyer().getUsername());
-            if(fav!=null){
-                return new ResponseEntity<>(fav,HttpStatusCode.valueOf(200));
-            }
-        }
-        catch(Exception e){
+            if(fav!=null)return new ResponseEntity<>(fav,HttpStatusCode.valueOf(200));
+        }catch(Exception e){
             map.put("messsage",e.getMessage());
-        }
-        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
-
+        }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
     @GetMapping("/like/getLikes")
     public ResponseEntity<?> getLikesForUser(@RequestParam("farmerId") Long farmerId){
         Map<String,Object> map= new HashMap<>();
-        try{
-            List<Favourites> favourites=userService.getAllLikedUsers(farmerId);
-            if(!favourites.isEmpty()){
-                return new ResponseEntity<>(favourites,HttpStatusCode.valueOf(200));
-            }
-        }
-        catch(Exception e){
+        try {
+            List<Favourites> favourites = userService.getAllLikedUsers(farmerId);
+            if (!favourites.isEmpty()) return new ResponseEntity<>(favourites, HttpStatusCode.valueOf(200));
+        }catch(Exception e){
             map.put("message",e.getMessage());
-        }
-        map.put("message","No users have liked this farmer.");
+        }map.put("message","No users have liked this farmer.");
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
-
-
 
 }

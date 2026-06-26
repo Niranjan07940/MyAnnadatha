@@ -1,6 +1,5 @@
 package com.example.demo.Utility;
 
-
 import com.example.demo.Beans.User;
 import com.example.demo.Repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +10,6 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -21,21 +19,16 @@ public class OauthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Autowired
     private JwtUtility jwtUtility;
-
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
-        System.out.println("token"+token);
         OAuth2User user = token.getPrincipal();
-        System.out.println(user.getAttributes());
         String name=user.getAttribute("name");
         String email=user.getAttribute("email");
         String profile=user.getAttribute("picture");
-
         User dbUser = userRepository.findByEmail(email);
         if(dbUser==null){
             dbUser = new User();
@@ -43,13 +36,9 @@ public class OauthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             dbUser.setUsername(name);
             dbUser.setProfileUrl(profile);
             dbUser.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-            userRepository.save(dbUser);  //Basically doesn't need to save the user in DB.
-                                          //for business purpose they need local use in DB.
+            userRepository.save(dbUser);
         }
-        System.out.println(name+" "+email);
         String jwt = jwtUtility.generateToken(dbUser);
-
-
         response.sendRedirect(
                 "http://localhost:3000/login-success?token=" + jwt);
     }

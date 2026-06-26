@@ -1,6 +1,5 @@
 package com.example.demo.Service;
 
-
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -17,30 +16,22 @@ public class OtpService {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
-
     private static final String OTP_PREFIX = "OTP_";
     private static final long EXPIRE_MINUTES = 5 ;
 
     @Value("${twilio.whatsapp-number}")
     private String twilioPhoneNumber;
-
     @Value("${twilio.account.sid}")
     private String accountSid;
-
     @Value("${twilio.auth.token}")
     private String authToken;
-
     @PostConstruct
     public void init() {
-        // Initialize Twilio SDK on application startup
         Twilio.init(accountSid, authToken);
     }
 
     public String generateOtp(String identifier) {
-        SecureRandom random = new SecureRandom();
-        int otpCode = 100000 + random.nextInt(899999);
-        String otpStr = String.valueOf(otpCode);
-        System.out.println("otpStr: " + otpStr);
+        String otpStr = String.valueOf(100000 + new SecureRandom().nextInt(899999));
         redisTemplate.opsForValue().set(OTP_PREFIX + identifier, otpStr, EXPIRE_MINUTES, TimeUnit.MINUTES);
         return otpStr;
     }
@@ -50,8 +41,7 @@ public class OtpService {
         if (cachedOtp != null && cachedOtp.equals(userOtp)) {
             redisTemplate.delete(OTP_PREFIX + identifier);
             return true;
-        }
-        return false;
+        }return false;
     }
 
     public void sendOtp(String phoneNumber, String otp) {
@@ -62,7 +52,5 @@ public class OtpService {
                 new PhoneNumber(twilioPhoneNumber),
                 messageBody
         ).create();
-        System.out.println("Sending OTP to " + to+", Message SI:"+message.getSid());
     }
-
 }

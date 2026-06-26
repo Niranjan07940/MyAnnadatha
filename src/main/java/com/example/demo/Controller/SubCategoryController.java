@@ -16,6 +16,5 @@ public class SubCategoryController {
     @GetMapping("/crop/getSubCategories")
     public ResponseEntity<?> getSubcategories(@RequestParam("catId") Long catId){
         return new ResponseEntity<>(subCategoryService.getSubCategory(catId), HttpStatusCode.valueOf(200));
-
     }
 }

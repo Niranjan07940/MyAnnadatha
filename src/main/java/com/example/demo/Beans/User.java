@@ -3,9 +3,7 @@ package com.example.demo.Beans;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.sql.Timestamp;
-import java.util.List;
 
 @Getter
 @Setter
@@ -22,8 +20,4 @@ public class User{
     private String profileUrl;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-
-
-
-
 }

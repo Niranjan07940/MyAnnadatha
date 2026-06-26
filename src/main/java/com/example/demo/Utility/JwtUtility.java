@@ -7,7 +7,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import javax.crypto.SecretKey;
 import java.util.Date;
 
@@ -33,12 +32,13 @@ public class JwtUtility {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-
     }
+
     public String getUsername(String token){
         Claims body=extractClaims(token);
         return body.getSubject();
     }
+
     public Long getUserId(String token){
         return extractClaims(token).get("userId", Long.class);
     }
@@ -49,11 +49,6 @@ public class JwtUtility {
     }
 
     public boolean validateToken(String username, UserDetails userDetails,String token) {
-        //TODO -check if username is same as username in user details
-        //TODO -check if the token is expired
         return username.equals(userDetails.getUsername()) &&  !isTokenExpired(token);
-
-
-
     }
 }

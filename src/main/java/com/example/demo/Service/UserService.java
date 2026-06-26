@@ -6,21 +6,16 @@ import com.example.demo.Beans.Favourites;
 import com.example.demo.Beans.User;
 import com.example.demo.Repository.FavouritesRepository;
 import com.example.demo.Repository.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 
 @Service
 public class UserService {
@@ -28,10 +23,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private Cloudinary cloudinary;
-
     @Autowired
     private FavouritesRepository favouritesRepository;
-
 
     public User register(User user) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -40,12 +33,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
-
     public User resetPassword(User user) {
-        System.out.println(user.getPassword());
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.out.println(user.getPassword());
         user.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
         return userRepository.save(user);
     }
@@ -73,12 +63,9 @@ public class UserService {
         return userRepository.findUserById(userId);
     }
 
-
     public Favourites uploadLikes(Favourites favourites) {
         return favouritesRepository.save(favourites);
-
     }
-
 
     public List<Favourites> getAllLikedUsers(Long farmerId) {
         return favouritesRepository.findByFarmer_Id(farmerId);
