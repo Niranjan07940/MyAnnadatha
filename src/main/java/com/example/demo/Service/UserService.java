@@ -70,4 +70,8 @@ public class UserService {
     public List<Favourites> getAllLikedUsers(Long farmerId) {
         return favouritesRepository.findByFarmer_Id(farmerId);
     }
+
+    public List<Favourites> getAllFavouritesOfUsers(Long userId) {
+        return favouritesRepository.findByBuyer_Id(userId);
+    }
 }

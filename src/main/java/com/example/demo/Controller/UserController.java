@@ -100,4 +100,15 @@ public class UserController {
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
+    @GetMapping("/getLikes")
+    public ResponseEntity<?> getLikes(@RequestParam("userId") Long userId){
+        Map<String,Object> map= new HashMap<>();
+        try{
+            List<Favourites> favourites = userService.getAllFavouritesOfUsers(userId);
+            if(!favourites.isEmpty())return new ResponseEntity<>(favourites, HttpStatusCode.valueOf(200));
+        }catch(Exception e){
+            map.put("message",e.getMessage());
+        }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
+
 }
