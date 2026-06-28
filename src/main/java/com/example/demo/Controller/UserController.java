@@ -4,9 +4,7 @@ import com.example.demo.Beans.Favourites;
 import com.example.demo.Beans.User;
 import com.example.demo.Service.UserService;
 import com.example.demo.Utility.JwtUtility;
-import com.twilio.http.Response;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -124,6 +122,22 @@ public class UserController {
             map.put("message",e.getMessage());
         }
         map.put("message","No users have liked this farmer.");
+        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
+
+
+    @PostMapping("/like/deleteLike")
+    public ResponseEntity<?> disLike(@RequestParam Long buyerId,@RequestParam Long farmerId){
+        System.out.println(buyerId+" "+farmerId);
+        Map<String,Object> map = new HashMap<>();
+        try{
+            userService.deleteLike(buyerId,farmerId);
+            map.put("message","like removed");
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+        }
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 

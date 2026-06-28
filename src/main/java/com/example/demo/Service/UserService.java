@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Time;
@@ -82,5 +83,12 @@ public class UserService {
 
     public List<Favourites> getAllLikedUsers(Long farmerId) {
         return favouritesRepository.findByFarmer_Id(farmerId);
+    }
+
+
+    @Transactional
+    public void deleteLike(Long buyerId, Long farmerId) {
+        int count=favouritesRepository.deleteByBuyerIdAndFarmerId(buyerId, farmerId);
+        System.out.println("deleted like"+count);
     }
 }
