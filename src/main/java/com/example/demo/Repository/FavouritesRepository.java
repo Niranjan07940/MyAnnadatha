@@ -12,11 +12,13 @@ import java.util.List;
 @Repository
 public interface FavouritesRepository extends JpaRepository<Favourites,Long> {
 
-
     List<User> getBuyerByBuyerId(Long userId);
-
     List<Favourites> findByFarmer_Id(Long farmerId);
+
 
     @Modifying
     int deleteByBuyerIdAndFarmerId(Long buyerId, Long farmerId);
+
+    List<Favourites> findByBuyer_Id(Long BuyerId);
+
 }
