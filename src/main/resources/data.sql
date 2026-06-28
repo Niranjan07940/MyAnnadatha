@@ -12,7 +12,7 @@ INSERT INTO categories (category_name) VALUES
                                            ('Plantation Crops'),
                                            ('Sugar Crops'),
                                            ('Millets'),
-                                           ('Animal Products') ON CONFLICT (category_name) DO NOTHING;
+                                           ('Animal Products')ON CONFLICT (category_name) DO NOTHING;
 INSERT INTO units (unit) VALUES
                              ('Kg'),
                              ('Quintal'),
@@ -21,7 +21,7 @@ INSERT INTO units (unit) VALUES
                              ('Piece'),
                              ('Bundle'),
                              ('Litre'),
-                             ('Gram') ON CONFLICT (unit) DO NOTHING;
+                             ('Gram')ON CONFLICT (unit) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Tomato',1,1),
                                                                ('Potato',1,1),
@@ -45,7 +45,7 @@ INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Beetroot',1,1),
                                                                ('Radish',1,1),
                                                                ('Cucumber',1,1),
-                                                               ('Raw Banana',1,1) ON CONFLICT (item_name) DO NOTHING;
+                                                               ('Raw Banana',1,1)ON CONFLICT (item_name) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Mango',2,1),
                                                                ('Banana',2,4),
@@ -62,7 +62,7 @@ INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Sapota',2,1),
                                                                ('Custard Apple',2,1),
                                                                ('Coconut',2,5),
-                                                               ('Lemon',2,1) ON CONFLICT (item_name) DO NOTHING;
+                                                               ('Lemon',2,1)ON CONFLICT (item_name) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Spinach',3,6),
                                                                ('Coriander',3,6),
@@ -70,13 +70,13 @@ INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Fenugreek Leaves',3,6),
                                                                ('Amaranthus',3,6),
                                                                ('Curry Leaves',3,6),
-                                                               ('Sorrel Leaves',3,6) ON CONFLICT (item_name) DO NOTHING;
+                                                               ('Sorrel Leaves',3,6)ON CONFLICT (item_name) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Paddy',4,2),
                                                                ('Rice',4,1),
                                                                ('Wheat',4,2),
                                                                ('Maize',4,2),
-                                                               ('Barley',4,2) ON CONFLICT (item_name) DO NOTHING;
+                                                               ('Barley',4,2)ON CONFLICT (item_name) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Red Gram',5,2),
                                                                ('Green Gram',5,2),
@@ -84,14 +84,14 @@ INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Bengal Gram',5,2),
                                                                ('Horse Gram',5,2),
                                                                ('Cowpea',5,2),
-                                                               ('Field Beans',5,2) ON CONFLICT (item_name) DO NOTHING;
+                                                               ('Field Beans',5,2)ON CONFLICT (item_name) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Groundnut',6,2),
                                                                ('Sunflower',6,2),
                                                                ('Sesame',6,2),
                                                                ('Mustard',6,2),
                                                                ('Castor',6,2),
-                                                               ('Soybean',6,2) ON CONFLICT (item_name) DO NOTHING;
+                                                               ('Soybean',6,2)ON CONFLICT (item_name) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Turmeric',7,1),
                                                                ('Red Chilli',7,1),
@@ -101,20 +101,20 @@ INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Cardamom',7,1),
                                                                ('Cloves',7,1),
                                                                ('Fennel',7,1),
-                                                               ('Fenugreek Seeds',7,1) ON CONFLICT (item_name) DO NOTHING;
+                                                               ('Fenugreek Seeds',7,1)ON CONFLICT (item_name) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Cashew',8,1),
                                                                ('Almond',8,1),
                                                                ('Walnut',8,1),
                                                                ('Raisins',8,1),
-                                                               ('Pistachio',8,1) ON CONFLICT (item_name) DO NOTHING;
+                                                               ('Pistachio',8,1)ON CONFLICT (item_name) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Marigold',9,1),
                                                                ('Rose',9,6),
                                                                ('Jasmine',9,6),
                                                                ('Lotus',9,5),
                                                                ('Chrysanthemum',9,6),
-                                                               ('Lily',9,5) ON CONFLICT (item_name) DO NOTHING;
+                                                               ('Lily',9,5)ON CONFLICT (item_name) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Tulsi',10,6),
                                                                ('Aloe Vera',10,5),
@@ -124,7 +124,7 @@ INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
                                                                ('Coffee Beans',11,2),
                                                                ('Tea Leaves',11,2),
                                                                ('Cocoa',11,2),
-                                                               ('Rubber Latex',11,7) ON CONFLICT (item_name) DO NOTHING;
+                                                               ('Rubber Latex',11,7)ON CONFLICT (item_name) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES
     ('Sugarcane',12,2)ON CONFLICT (item_name) DO NOTHING;
 INSERT INTO sub_category (item_name,categories_id,unit_id) VALUES

@@ -1,7 +1,5 @@
 package com.example.demo.Controller;
 
-
-
 import com.example.demo.Beans.User;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.Service.OtpService;
@@ -17,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,60 +40,44 @@ public class AuthController {
         User savedUser=userService.register(user);
         Map<String,Object> map=new HashMap<>();
         try{
-            if(savedUser!=null){
-                return new ResponseEntity<>(savedUser,HttpStatus.OK);
-            }
-        }
-        catch(Exception e){
+            if(savedUser!=null)return new ResponseEntity<>(savedUser,HttpStatus.OK);
+        }catch(Exception e){
             map.put("message",e.getMessage());
-        }
-        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
     @PostMapping("/auth/signin")
     public ResponseEntity<?> loginUser(@RequestBody User user) {
-        String message="";
         Map<String,Object> map = new HashMap<>();
         User u;
         try{
             Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword()));
             if(authentication.isAuthenticated()){
                 u=userRepository.findUserByEmail(user.getEmail());
-                message=jwtUtility.generateToken(u);
-                map.put("message",message);
+                map.put("message",jwtUtility.generateToken(u));
                 return new  ResponseEntity<>(map, HttpStatus.OK);
             }
-        }
-        catch(Exception e){
-            message=e.getMessage();
-            map.put("message",message);
-        }
-        return new  ResponseEntity<>(map, HttpStatusCode.valueOf(404));
-    }
-    @GetMapping("/getMessage")
-    public String test(){
-        return "This is sample";
+        }catch(Exception e){
+            map.put("message",e.getMessage());
+        }return new  ResponseEntity<>(map, HttpStatusCode.valueOf(404));
     }
     
-        @GetMapping("/oauth/login")
-        public void login(HttpServletResponse response) throws IOException {
-            response.sendRedirect("/oauth2/authorization/google");
-        }
+    @GetMapping("/oauth/login")
+    public void login(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/oauth2/authorization/google");
+    }
 
     @PostMapping("auth/otpSignIn")
     public ResponseEntity<?> otpSignIn(@RequestBody User user){
-        String message="";
         Map<String,Object> map = new HashMap<>();
         try{
             String otp = otpService.generateOtp(user.getPhoneNumber().toString());
             otpService.sendOtp(user.getPhoneNumber().toString(), otp);
-            message="OTP sent successfully";
-        }
-        catch(Exception e){
-            message=e.getMessage();
-        }
-        map.put("message",message);
-        return new ResponseEntity<>(map,HttpStatus.OK);
+            map.put("message","OTP sent successfully");
+            return new ResponseEntity<>(map,HttpStatus.OK);
+        }catch(Exception e){
+            map.put("message",e.getMessage());
+        }return new ResponseEntity<>(map,HttpStatus.OK);
     }
 
     @PostMapping("auth/ValidateOtp")
@@ -106,37 +87,26 @@ public class AuthController {
         String otp = (String) payload.get("otp");
         String phoneNumber = (String) payload.get("phoneNumber");
         User user = userRepository.findByPhoneNumber(phoneNumber);
-        boolean isValid=false;
         if(user!=null){
-            isValid = otpService.validateOtp(phoneNumber, otp);
-        }
-        if(isValid){
-            message = jwtUtility.generateToken(user);
-            map.put("message",message);
-            System.out.println(message);
-            return new ResponseEntity<>(map,HttpStatus.OK);
-        }
-        map.put("message","Invalid Otp");
+            if(otpService.validateOtp(phoneNumber, otp)) {
+                map.put("message", jwtUtility.generateToken(user));
+                return new ResponseEntity<>(map, HttpStatus.OK);
+            }
+        }map.put("message","Invalid Otp");
         return  new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("auth/resetPassword")
     public ResponseEntity<?> resetPassword(@RequestBody User user){
-        String message="";
         Map<String,Object> map = new HashMap<>();
-
         User existingUser=userRepository.findByPhoneNumber(user.getPhoneNumber());
         if(existingUser==null){
-            message="user does not exist,register first";
-            map.put("message",message);
+            map.put("message","user does not exist,PLease register");
             return new ResponseEntity<>(map,HttpStatusCode.valueOf(404));
-        }
-        existingUser.setPassword(user.getPassword());
+        }existingUser.setPassword(user.getPassword());
         userService.resetPassword(existingUser);
-        message="password reset successful";
-        map.put("message",message);
+        map.put("message","password reset successful");
         return new ResponseEntity<>(map,HttpStatus.OK);
     }
-
 
 }

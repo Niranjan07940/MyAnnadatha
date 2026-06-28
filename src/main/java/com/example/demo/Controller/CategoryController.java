@@ -1,6 +1,5 @@
 package com.example.demo.Controller;
 
-
 import com.example.demo.Service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -18,7 +17,6 @@ public class CategoryController {
 
     @GetMapping("/category/getCategories")
     public ResponseEntity<?> getCategories(){
-        System.out.println("calling");
-        return new ResponseEntity(categoryService.getAllCategories(), HttpStatusCode.valueOf(200));
+        return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatusCode.valueOf(200));
     }
 }

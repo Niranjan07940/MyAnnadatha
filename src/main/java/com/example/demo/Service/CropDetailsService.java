@@ -1,6 +1,5 @@
 package com.example.demo.Service;
 
-
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.demo.Beans.*;
@@ -11,16 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class CropDetailsService {
@@ -31,10 +23,8 @@ public class CropDetailsService {
     private UserRepository userRepository;
     @Autowired
     private CropDetailsRepository cropDetailsRepository;
-
     @Autowired
     private Cloudinary cloudinary;
-
 
     public CropDetails uploadCrop(CropRequest cropRequest){
         CropDetails cropDetails= new CropDetails();
@@ -44,9 +34,7 @@ public class CropDetailsService {
         cropDetails.setSubCategory(subCategoryRepository.findSubCategoryById(cropRequest.getItemId()));
         cropDetails.setUser(userRepository.findUserById(cropRequest.getUserId()));
         return cropDetailsRepository.save(cropDetails);
-
     }
-
 
     public String uploadImage(MultipartFile file) throws Exception{
         Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
@@ -55,7 +43,6 @@ public class CropDetailsService {
         return uploadResult.get("secure_url").toString();
     }
 
-
     public Page<CropDetails> getCrops(int page, int size) {
         Pageable pageable = PageRequest.of(
                 page,
@@ -63,8 +50,5 @@ public class CropDetailsService {
                 Sort.by(Sort.Direction.DESC, "id")
         );
         return cropDetailsRepository.findAll(pageable);
-
     }
-
-
 }
