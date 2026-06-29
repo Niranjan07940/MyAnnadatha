@@ -9,6 +9,10 @@ import com.example.demo.Repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -80,9 +84,9 @@ public class UserService {
 
     }
 
-
-    public List<Favourites> getAllLikedUsers(Long farmerId) {
-        return favouritesRepository.findByFarmer_Id(farmerId);
+    public Page<Favourites> getAllLikedUsers(Long farmerId, int page, int pageSize) {
+                Pageable pageable = PageRequest.of(page, pageSize);
+                return favouritesRepository.findByFarmer_Id(farmerId,pageable);
     }
 
 
