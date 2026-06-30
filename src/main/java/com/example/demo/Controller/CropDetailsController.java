@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Beans.CropDetails;
+import com.example.demo.Beans.User;
 import com.example.demo.DTO.CropRequest;
 import com.example.demo.DTO.NearbyCropResponse;
 import com.example.demo.Service.CropDetailsService;
@@ -54,17 +55,25 @@ public class CropDetailsController {
         try{
             List<NearbyCropResponse> list=cropDetailsService.getNearByCrops(latitude,longitude,radius);
             if(list.isEmpty()){
-                System.out.println("testing ");
                 map.put("message","No crops avaliable nearBy you!");
                 return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
             }
-        }
-        catch(Exception e){
+        }catch(Exception e){
             map.put("message",e.getMessage());
             return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
-        }
-        return ResponseEntity.ok(cropDetailsService.getNearByCrops(latitude,longitude,radius));
+        }return ResponseEntity.ok(cropDetailsService.getNearByCrops(latitude,longitude,radius));
     }
 
-
+    @GetMapping("/getAllFarmars")
+    public ResponseEntity<?> getAllFarmars(@RequestParam("subCategory") int subCategoryId,@RequestParam("page")int page){
+        Map<String,Object> map = new HashMap<>();
+        try{
+            Page<CropDetails> farmers = cropDetailsService.getFarmersBySubCategory(subCategoryId, page);
+            return new ResponseEntity<>(farmers,HttpStatusCode.valueOf(200));
+        }catch(Exception e){
+            map.put("message",e.getMessage());
+            return  new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }
+    }
+    
 }

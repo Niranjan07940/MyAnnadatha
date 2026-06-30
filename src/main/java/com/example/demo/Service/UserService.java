@@ -93,6 +93,5 @@ public class UserService {
     @Transactional
     public void deleteLike(Long buyerId, Long farmerId) {
         int count=favouritesRepository.deleteByBuyerIdAndFarmerId(buyerId, farmerId);
-        System.out.println("deleted like"+count);
     }
 }

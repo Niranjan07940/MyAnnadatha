@@ -24,10 +24,10 @@ public class CropDetails {
     @UpdateTimestamp
     private Timestamp updatedAt;
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="userId")
     private User user;
     @ManyToOne
-    @JoinColumn(name="subCategory_id")
+    @JoinColumn(name="subCategoryId")
     private SubCategory subCategory;
 
     @ManyToOne

@@ -75,6 +75,8 @@ public class CropDetailsService {
                 .toList();
     }
 
-
-
+    public Page<CropDetails> getFarmersBySubCategory(int subCategory,int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return cropDetailsRepository.getCropDetailsBySubCategoryId(subCategory,pageable);
+    }
 }
