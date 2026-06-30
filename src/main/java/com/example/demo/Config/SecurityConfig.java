@@ -35,7 +35,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth->auth.requestMatchers("/auth/**","/oauth/**","/like/**").permitAll()
+                .authorizeHttpRequests(auth->auth.requestMatchers("/auth/**","/oauth/**","/crop/uploadCrop","/crop/nearBy").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {

@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Beans.CropDetails;
 import com.example.demo.DTO.CropRequest;
+import com.example.demo.DTO.NearbyCropResponse;
 import com.example.demo.Service.CropDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,6 @@ public class CropDetailsController {
         }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
-
     @GetMapping("/crop/getFreshCrops")
     public ResponseEntity<?> getFreshCropDetails(@RequestParam("page")int page){
         Map<String,Object> map = new HashMap<>();
@@ -47,5 +47,24 @@ public class CropDetailsController {
             map.put("message",e.getMessage());
         }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
+
+    @GetMapping("/crop/nearBy")
+    public ResponseEntity<?> getNearByCrops(@RequestParam("latitude") Double latitude, @RequestParam("longitude") Double longitude, @RequestParam(defaultValue = "60") Double radius){
+        Map<String,Object> map=new HashMap<>();
+        try{
+            List<NearbyCropResponse> list=cropDetailsService.getNearByCrops(latitude,longitude,radius);
+            if(list.isEmpty()){
+                System.out.println("testing ");
+                map.put("message","No crops avaliable nearBy you!");
+                return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+            }
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }
+        return ResponseEntity.ok(cropDetailsService.getNearByCrops(latitude,longitude,radius));
+    }
+
 
 }

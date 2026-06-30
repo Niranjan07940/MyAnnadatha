@@ -11,4 +11,7 @@ public class CropRequest {
     private Double cropQuantity;
     private List<String> images;
     private Long userId;
+
+    private Double longitude;
+    private Double latitude;
 }

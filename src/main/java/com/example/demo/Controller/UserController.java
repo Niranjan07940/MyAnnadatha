@@ -111,4 +111,5 @@ public class UserController {
             map.put("message",e.getMessage());
         }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
+
 }
