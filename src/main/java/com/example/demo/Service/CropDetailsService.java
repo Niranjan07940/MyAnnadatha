@@ -83,7 +83,8 @@ public class CropDetailsService {
     }
 
     public Page<CropDetails> getCropDetailsByCategory(Long categoryId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size,
+                Sort.by(Sort.Direction.DESC, "id"));
         return cropDetailsRepository.findBySubCategoryCategoriesId(categoryId, pageable);
     }
 

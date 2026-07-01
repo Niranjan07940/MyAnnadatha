@@ -89,7 +89,7 @@ public class CropDetailsController {
             map.put("message",e.getMessage());
             return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
         }
-        map.put("message","no vegetables available for this category");
+        map.put("message","no crops available for this category");
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
