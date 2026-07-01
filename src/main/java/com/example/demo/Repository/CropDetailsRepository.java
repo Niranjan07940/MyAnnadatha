@@ -53,4 +53,7 @@ public interface CropDetailsRepository extends JpaRepository<CropDetails,Long> {
 
     Page<CropDetails> getCropDetailsBySubCategoryId(int subCategory, Pageable pageable);
 
+    Page<CropDetails> findBySubCategoryCategoriesId(Long categoryId, Pageable pageable);
+
+
 }

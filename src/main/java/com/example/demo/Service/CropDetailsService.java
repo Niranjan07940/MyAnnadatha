@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -79,4 +81,10 @@ public class CropDetailsService {
         Pageable pageable = PageRequest.of(page, 10);
         return cropDetailsRepository.getCropDetailsBySubCategoryId(subCategory,pageable);
     }
+
+    public Page<CropDetails> getCropDetailsByCategory(Long categoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return cropDetailsRepository.findBySubCategoryCategoriesId(categoryId, pageable);
+    }
+
 }

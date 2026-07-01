@@ -19,4 +19,5 @@ public class CategoryController {
     public ResponseEntity<?> getCategories(){
         return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatusCode.valueOf(200));
     }
+
 }

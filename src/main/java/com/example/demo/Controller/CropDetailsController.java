@@ -52,10 +52,11 @@ public class CropDetailsController {
     @GetMapping("/crop/nearBy")
     public ResponseEntity<?> getNearByCrops(@RequestParam("latitude") Double latitude, @RequestParam("longitude") Double longitude, @RequestParam(defaultValue = "60") Double radius){
         Map<String,Object> map=new HashMap<>();
+        System.out.println("latitude: "+" "+latitude+" "+"longitude: "+" "+longitude);
         try{
             List<NearbyCropResponse> list=cropDetailsService.getNearByCrops(latitude,longitude,radius);
             if(list.isEmpty()){
-                map.put("message","No crops avaliable nearBy you!");
+                map.put("message","No crops available nearBy you!");
                 return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
             }
         }catch(Exception e){
@@ -64,8 +65,8 @@ public class CropDetailsController {
         }return ResponseEntity.ok(cropDetailsService.getNearByCrops(latitude,longitude,radius));
     }
 
-    @GetMapping("/getAllFarmars")
-    public ResponseEntity<?> getAllFarmars(@RequestParam("subCategory") int subCategoryId,@RequestParam("page")int page){
+    @GetMapping("crop/getAllFarmars")
+    public ResponseEntity<?> getAllFarmers(@RequestParam("subCategory") int subCategoryId,@RequestParam("page")int page){
         Map<String,Object> map = new HashMap<>();
         try{
             Page<CropDetails> farmers = cropDetailsService.getFarmersBySubCategory(subCategoryId, page);
@@ -75,5 +76,23 @@ public class CropDetailsController {
             return  new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
         }
     }
+    @GetMapping("/crop/getSubCategoryByCategoryId")
+    public ResponseEntity<?> getCropDetailsByCategory(@RequestParam("catId") Long catId,@RequestParam("page") int page) {
+        Map<String,Object> map= new HashMap<>();
+        try{
+            Page<CropDetails> crops = cropDetailsService.getCropDetailsByCategory(catId, page,10);
+            if(!crops.isEmpty()){
+                return new ResponseEntity<>(crops,HttpStatusCode.valueOf(200));
+            }
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }
+        map.put("message","no vegetables available for this category");
+        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
+
+
     
 }

@@ -17,4 +17,7 @@ public class SubCategoryController {
     public ResponseEntity<?> getSubcategories(@RequestParam("catId") Long catId){
         return new ResponseEntity<>(subCategoryService.getSubCategory(catId), HttpStatusCode.valueOf(200));
     }
+
+
+
 }
