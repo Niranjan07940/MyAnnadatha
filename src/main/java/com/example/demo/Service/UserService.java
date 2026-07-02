@@ -124,4 +124,8 @@ public class UserService {
         map.put("message","Password Updated Successfully");
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
     }
+
+    public User getUserByEmail(String username) {
+        return userRepository.findUserByEmail(username);
+    }
 }

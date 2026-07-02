@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalTime;
@@ -28,8 +29,12 @@ public class UserController {
 
     @PostMapping("/user/updateWithProfile")
     public ResponseEntity<?> updateProfile(@ModelAttribute User user, @RequestPart("file") MultipartFile file) throws Exception{
-        user.setProfileUrl(userService.uploadImage(file));
-        User savedUser=userService.updateUser(user);
+        User u=userService.getUserByEmail(user.getEmail());
+        u.setUsername(user.getUsername());
+        u.setPhoneNumber(user.getPhoneNumber());
+        u.setProfileUrl(userService.uploadImage(file));
+
+        User savedUser=userService.updateUser(u);
         Map<String,Object> map=new HashMap<>();
         try{
             if(savedUser!=null)return new ResponseEntity<>(savedUser, HttpStatus.OK);
@@ -43,7 +48,10 @@ public class UserController {
     public ResponseEntity<?> updateProfile(@RequestBody User user){
         Map<String,Object> map= new HashMap<>();
         try{
-            return new ResponseEntity<>(userService.updateUser(user),HttpStatusCode.valueOf(200));
+            User u=userService.getUserByEmail(user.getEmail());
+            u.setPhoneNumber(user.getPhoneNumber());
+            u.setUsername(user.getUsername());
+            return new ResponseEntity<>(userService.updateUser(u),HttpStatusCode.valueOf(200));
         }
         catch(Exception e){
             map.put("message",e.getMessage());
@@ -53,7 +61,6 @@ public class UserController {
     @PostMapping("/user/updatePassword")
     public ResponseEntity<?> updatePassword(@RequestBody UpdatePassword updatePassword){
         return userService.updatePassword(updatePassword);
-
     }
 
     @PostMapping("/user/getUser")
