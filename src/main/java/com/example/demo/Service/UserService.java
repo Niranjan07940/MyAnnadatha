@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.demo.Beans.Favourites;
 import com.example.demo.Beans.User;
+import com.example.demo.DTO.UpdatePassword;
 import com.example.demo.Repository.FavouritesRepository;
 import com.example.demo.Repository.UserRepository;
 
@@ -13,6 +14,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -93,5 +99,31 @@ public class UserService {
     @Transactional
     public void deleteLike(Long buyerId, Long farmerId) {
         int count=favouritesRepository.deleteByBuyerIdAndFarmerId(buyerId, farmerId);
+    }
+
+
+    public ResponseEntity<?> updatePassword(UpdatePassword updatePassword) {
+        Map<String, Object> map = new HashMap<>();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String username = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+        User user = userRepository.findByEmail(username);
+        if(user==null){
+            map.put("message","user not found");
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }
+        else if(!passwordEncoder.matches(updatePassword.getOldPassword(),user.getPassword())){
+            map.put("message", "Old password is incorrect");
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }
+        else if(!updatePassword.getNewPassword().equals(updatePassword.getConfirmPassword())){
+            map.put("message","passwords do not match");
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }
+        user.setPassword(passwordEncoder.encode(updatePassword.getNewPassword()));
+        userRepository.save(user);
+        map.put("message","Password Updated Successfully");
+        return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
     }
 }

@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Beans.Favourites;
 import com.example.demo.Beans.User;
+import com.example.demo.DTO.UpdatePassword;
 import com.example.demo.Service.UserService;
 import com.example.demo.Utility.JwtUtility;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,6 +48,12 @@ public class UserController {
         catch(Exception e){
             map.put("message",e.getMessage());
         }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
+
+    @PostMapping("/user/updatePassword")
+    public ResponseEntity<?> updatePassword(@RequestBody UpdatePassword updatePassword){
+        return userService.updatePassword(updatePassword);
+
     }
 
     @PostMapping("/user/getUser")
@@ -111,5 +118,7 @@ public class UserController {
             map.put("message",e.getMessage());
         }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
+
+
 
 }
