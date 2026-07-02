@@ -47,7 +47,6 @@ public class UserService {
     public User register(User user) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         return userRepository.save(user);
     }
 
@@ -70,7 +69,6 @@ public class UserService {
     }
 
     public User updateUser(User user) {
-        user.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
         return userRepository.save(user);
     }
 

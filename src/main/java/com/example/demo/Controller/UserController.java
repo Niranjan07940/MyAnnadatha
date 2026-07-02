@@ -29,7 +29,7 @@ public class UserController {
     @PostMapping("/user/updateWithProfile")
     public ResponseEntity<?> updateProfile(@ModelAttribute User user, @RequestPart("file") MultipartFile file) throws Exception{
         user.setProfileUrl(userService.uploadImage(file));
-        User savedUser=userService.register(user);
+        User savedUser=userService.updateUser(user);
         Map<String,Object> map=new HashMap<>();
         try{
             if(savedUser!=null)return new ResponseEntity<>(savedUser, HttpStatus.OK);

@@ -22,7 +22,6 @@ public class CropLocation {
 
     @CreationTimestamp
     @Column(updatable = false)
-
     private Timestamp createdAt;
 
     @UpdateTimestamp
