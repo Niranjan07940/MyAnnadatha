@@ -88,4 +88,12 @@ public class CropDetailsService {
         return cropDetailsRepository.findBySubCategoryCategoriesId(categoryId, pageable);
     }
 
+    public Long getCropDetailsCountByFarmer(Long farmerId) {
+        return cropDetailsRepository.countByUserId(farmerId);
+    }
+
+    public Page<CropDetails> getCropDetailsByFarmer(Long farmerId, int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
+        return cropDetailsRepository.getCropDetailsByUserId(farmerId, pageable);
+    }
 }

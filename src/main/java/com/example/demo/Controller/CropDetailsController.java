@@ -1,7 +1,6 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Beans.CropDetails;
-import com.example.demo.Beans.User;
 import com.example.demo.DTO.CropRequest;
 import com.example.demo.DTO.NearbyCropResponse;
 import com.example.demo.Service.CropDetailsService;
@@ -93,6 +92,31 @@ public class CropDetailsController {
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
+    @GetMapping("/crop/getByFarmer")
+    public ResponseEntity<?> getByFarmer(@RequestParam("farmerId") Long farmerId) {
+        Map<String,Object> map= new HashMap<>();
+        try{
+            map.put("count",cropDetailsService.getCropDetailsCountByFarmer(farmerId));
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
+        }catch(Exception e){
+            map.put("message",e.getMessage());
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }
+    }
 
+    @GetMapping("/crop/getAllFarmerCrops")
+    public ResponseEntity<?> getAllFarmerCrops(@RequestParam("farmerId") Long farmerId,@RequestParam("page") int page) {
+        Map<String,Object> map= new HashMap<>();
+        try{
+            Page<CropDetails> cropDetails = cropDetailsService.getCropDetailsByFarmer(farmerId, page);
+            if(!cropDetails.isEmpty()){
+                return new ResponseEntity<>(cropDetails,HttpStatusCode.valueOf(200));
+            }map.put("message","no crops available for this category");
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }catch(Exception e){
+            map.put("message",e.getMessage());
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }
+    }
     
 }
