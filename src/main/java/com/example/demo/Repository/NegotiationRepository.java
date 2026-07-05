@@ -21,4 +21,8 @@ public interface NegotiationRepository extends JpaRepository<NegotiationRequest,
     NegotiationRequest getNegotiationRequestById(Long id);
 
     NegotiationRequest getByRequestQuotation_IdAndUser_Id(Long qid, Long userId);
+
+
+
+    NegotiationRequest getNegotiationRequestByRequestQuotationIdAndUserId(Long qid, Long userId);
 }

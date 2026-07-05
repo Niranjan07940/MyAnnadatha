@@ -96,9 +96,8 @@ public class QuotationController {
     @PostMapping("/quote/acceptQuotation")
     public ResponseEntity<?> acceptQuotation(@RequestBody AcceptedQuotations acceptedQuotations){
         Map<String,Object> map = new HashMap<>();
-        System.out.println(acceptedQuotations.getAcceptedPrice()+" "+acceptedQuotations.getRequestQuotation().getId()+" "+acceptedQuotations.getUser().getId());
         try{
-            AcceptedQuotations acceptedQuotations1=quotationService.acceptQuotation(acceptedQuotations.getRequestQuotation().getId(),acceptedQuotations.getUser().getId());
+            AcceptedQuotations acceptedQuotations1=quotationService.acceptQuotation(acceptedQuotations);
             return new ResponseEntity<>(acceptedQuotations1, HttpStatusCode.valueOf(200));
         }
         catch(Exception e){
@@ -201,6 +200,7 @@ public class QuotationController {
             map.put("message",e.getMessage());
         }
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
-
     }
+
+
 }

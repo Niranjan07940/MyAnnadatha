@@ -48,6 +48,18 @@ public class QuotationService {
     }
 
     public NegotiationRequest createNegotiation(Long qid,Long userId,Double cropPrice) {
+        NegotiationRequest negotiationRequest1 = negotiationRepository.getNegotiationRequestByRequestQuotationIdAndUserId(qid,userId);
+        if(negotiationRequest1!=null){
+            NegotiationResponse negotiationResponse = negotiationResponseRepository
+                    .findNegotiationResponseByNegotiationRequestAndBuyerAndFarmer(negotiationRequest1,
+                            negotiationRequest1.getRequestQuotation().getUser(),
+                            negotiationRequest1.getUser());
+            if(negotiationResponse!=null){
+                negotiationResponseRepository.delete(negotiationResponse);
+            }
+            negotiationRepository.delete(negotiationRequest1);
+        }
+
         User user=userRepository.findUserById(userId);
         RequestQuotation requestQuotation=quotationRepository.findRequestQuotationById(qid);
         requestQuotation.setNegotiationStatus(NegotiationStatus.NEGOTIATING);
@@ -56,10 +68,7 @@ public class QuotationService {
         NegotiationRequest negotiationRequest= new NegotiationRequest();
         negotiationRequest.setUser(user);
         negotiationRequest.setRequestQuotation(requestQuotation);
-
         negotiationRequest.setCropPrice(cropPrice);
-
-
         return negotiationRepository.save(negotiationRequest);
     }
 
@@ -67,11 +76,12 @@ public class QuotationService {
         return quotationRepository.findRequestQuotationById(qid);
     }
 
-    public AcceptedQuotations acceptQuotation(Long qid,Long userId) {
-        RequestQuotation requestQuotation=quotationRepository.findRequestQuotationById(qid);
+    public AcceptedQuotations acceptQuotation(AcceptedQuotations acceptedQuotations) {
+        RequestQuotation requestQuotation=quotationRepository.findRequestQuotationById(acceptedQuotations.getRequestQuotation().getId());
         requestQuotation.setNegotiationStatus(NegotiationStatus.ACCEPTED);
+        requestQuotation.setCropPrice(acceptedQuotations.getAcceptedPrice());
         quotationRepository.save(requestQuotation);
-        User user=userRepository.findUserById(userId);
+        User user=userRepository.findUserById(acceptedQuotations.getUser().getId());
         AcceptedQuotations ac=new AcceptedQuotations();
         ac.setRequestQuotation(requestQuotation);
         ac.setUser(user);
@@ -95,6 +105,11 @@ public class QuotationService {
     }
 
     public NegotiationResponse createNegotiationResponse(NegotiationResponse negotiationResponse) {
+        NegotiationResponse negotiationResponse1=negotiationResponseRepository.findNegotiationResponseByNegotiationRequestAndBuyerAndFarmer(negotiationResponse.getNegotiationRequest(),
+                negotiationResponse.getBuyer(),negotiationResponse.getFarmer());
+        if(negotiationResponse1!=null){
+            negotiationResponseRepository.delete(negotiationResponse1);
+        }
         NegotiationRequest negotiationRequest=negotiationRepository.getNegotiationRequestById(negotiationResponse.getNegotiationRequest().getId());
         User user=userRepository.findUserById(negotiationResponse.getFarmer().getId());
         User buyer=userRepository.findUserById(negotiationResponse.getBuyer().getId());
