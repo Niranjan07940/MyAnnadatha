@@ -1,9 +1,7 @@
 package com.example.demo.Beans;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,25 +12,27 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Entity
-@Table(name="Users")
-public class User{
+public class NegotiationRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @NotNull
-    private String username;
-    @Email
-    @NotNull
-    private String email;
-    @JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
-    private String password;
-    private Long phoneNumber;
-    private String profileUrl;
+    private Long Id;
+
+    private Double cropPrice;
+
+    @ManyToOne
+    @JoinColumn(name="requestQuotation_id")
+    private RequestQuotation requestQuotation;
+
+    @ManyToOne
+    @JoinColumn(name="farmer_id")
+    private User user;
+
 
     @CreationTimestamp
     @Column(updatable = false)
     private Timestamp createdAt;
-
     @UpdateTimestamp
     private Timestamp updatedAt;
+
+
 }
