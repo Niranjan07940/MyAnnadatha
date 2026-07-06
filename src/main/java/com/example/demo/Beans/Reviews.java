@@ -1,0 +1,36 @@
+package com.example.demo.Beans;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.sql.Timestamp;
+
+@Getter
+@Setter
+@Entity
+public class Reviews {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name="buyer_id")
+    private User buyer;
+    @ManyToOne
+    @JoinColumn(name="farmer_id")
+    private User farmer;
+
+    private String review;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    private Timestamp updatedAt;
+
+}

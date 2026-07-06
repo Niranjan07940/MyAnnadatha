@@ -1,6 +1,8 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Beans.Favourites;
+import com.example.demo.Beans.Ratings;
+import com.example.demo.Beans.Reviews;
 import com.example.demo.Beans.User;
 import com.example.demo.DTO.UpdatePassword;
 import com.example.demo.Service.UserService;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -102,7 +105,7 @@ public class UserController {
         }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
-    @GetMapping("/like/getLikes")
+    @GetMapping("/like/getLikesForFarmer")
     public ResponseEntity<?> getLikesForUser(@RequestParam("farmerId") Long farmerId,@RequestParam("page") int page){
         Map<String,Object> map= new HashMap<>();
         try{
@@ -125,6 +128,64 @@ public class UserController {
             map.put("message",e.getMessage());
         }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
+
+    @PostMapping("/rating/addRating")
+    public ResponseEntity<?> uploadRating(@RequestBody Ratings ratings){
+        Map<String,Object> map = new HashMap<>();
+        try{
+            Ratings ratings1=userService.addRating(ratings);
+            if(ratings1!=null){
+                map.put("message","rating added successfully");
+                return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
+            }
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+        }
+        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
+
+    @PostMapping("/review/addReview")
+    public ResponseEntity<?> uploadReview(@RequestBody Reviews reviews){
+        Map<String,Object> map = new HashMap<>();
+        try{
+            Reviews reviews1=userService.uploadReview(reviews);
+            if(reviews1!=null){
+                map.put("message","review added successfully");
+                return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
+            }
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+        }
+        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
+
+    @GetMapping("/review/getReviews")
+    public ResponseEntity<?> getReviews(@RequestParam("farmerId") Long farmerId,@RequestParam("page") int page){
+        Map<String,Object> map = new HashMap<>();
+        try{
+            Page<Reviews> reviews=userService.getReviews(farmerId,page);
+            if(!reviews.isEmpty())return new ResponseEntity<>(reviews,HttpStatusCode.valueOf(200));
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+        }
+        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
+
+    @GetMapping("/rating/getRatings")
+    public ResponseEntity<?> getRatings(@RequestParam("farmerId") Long farmerId){
+        List<Ratings> ratings=userService.getRatingsForUser(farmerId);
+        return new ResponseEntity<>(ratings,HttpStatusCode.valueOf(200));
+
+    }
+
+
+
+
+
+
 
 
 

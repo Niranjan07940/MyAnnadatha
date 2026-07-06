@@ -3,9 +3,13 @@ package com.example.demo.Service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.demo.Beans.Favourites;
+import com.example.demo.Beans.Ratings;
+import com.example.demo.Beans.Reviews;
 import com.example.demo.Beans.User;
 import com.example.demo.DTO.UpdatePassword;
 import com.example.demo.Repository.FavouritesRepository;
+import com.example.demo.Repository.RatingsRepository;
+import com.example.demo.Repository.ReviewsRepository;
 import com.example.demo.Repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +46,12 @@ public class UserService {
 
     @Autowired
     private FavouritesRepository favouritesRepository;
+
+    @Autowired
+    private RatingsRepository ratingsRepository;
+
+    @Autowired
+    private ReviewsRepository reviewsRepository;
 
 
     public User register(User user) {
@@ -127,5 +137,29 @@ public class UserService {
 
     public User getUserByEmail(String username) {
         return userRepository.findUserByEmail(username);
+    }
+
+    public Ratings addRating(Ratings ratings) {
+        Ratings ratings1=ratingsRepository.save(ratings);
+        User user=userRepository.findUserById(ratings.getFarmer().getId());
+        user.setTotalRating(user.getTotalRating()+((ratings1.getRating()-user.getTotalRating())/
+                (user.getCount()+1)));
+        user.setCount(user.getCount()+1);
+        userRepository.save(user);
+        return ratings1;
+
+    }
+
+    public List<Ratings> getRatingsForUser(Long farmerId) {
+        return ratingsRepository.findAllByFarmerId(farmerId);
+    }
+
+    public Reviews uploadReview(Reviews reviews) {
+        return reviewsRepository.save(reviews);
+    }
+
+    public Page<Reviews> getReviews(Long farmerId,int page) {
+        Pageable pageable = PageRequest.of(page, 3,Sort.by(Sort.Direction.DESC,"id"));
+        return reviewsRepository.findAllByFarmerId(farmerId,pageable);
     }
 }

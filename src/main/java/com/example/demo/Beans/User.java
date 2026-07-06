@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,6 +29,11 @@ public class User{
     private String password;
     private Long phoneNumber;
     private String profileUrl;
+
+
+    private Double totalRating=0.0;
+
+    private Integer count=0;
 
     @CreationTimestamp
     @Column(updatable = false)

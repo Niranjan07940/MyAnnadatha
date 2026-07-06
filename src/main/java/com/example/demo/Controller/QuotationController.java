@@ -187,7 +187,6 @@ public class QuotationController {
     @GetMapping("/quote/getNegotiationResponse")
     public ResponseEntity<?> getNegotiationResponse(@RequestParam("negotiationRequestId") Long negotiationRequestId){
         Map<String,Object> map= new HashMap<>();
-        System.out.println("negotiationResponseId"+" "+negotiationRequestId);
         try{
             NegotiationResponse negotiationResponse=quotationService.getReponse(negotiationRequestId);
             if(negotiationResponse!=null){
@@ -201,6 +200,8 @@ public class QuotationController {
         }
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
+
+
 
 
 }
