@@ -140,6 +140,7 @@ public class UserService {
     }
 
     public Ratings addRating(Ratings ratings) {
+
         Ratings ratings1=ratingsRepository.save(ratings);
         User user=userRepository.findUserById(ratings.getFarmer().getId());
         user.setTotalRating(user.getTotalRating()+((ratings1.getRating()-user.getTotalRating())/
@@ -161,5 +162,9 @@ public class UserService {
     public Page<Reviews> getReviews(Long farmerId,int page) {
         Pageable pageable = PageRequest.of(page, 3,Sort.by(Sort.Direction.DESC,"id"));
         return reviewsRepository.findAllByFarmerId(farmerId,pageable);
+    }
+
+    public boolean getLike(Favourites favourites) {
+        return favouritesRepository.existsByBuyerIdAndFarmerId(favourites.getBuyer().getId(),favourites.getFarmer().getId());
     }
 }

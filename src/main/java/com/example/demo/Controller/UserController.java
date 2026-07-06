@@ -99,7 +99,10 @@ public class UserController {
         Map<String,Object> map = new HashMap<>();
         try{
             Favourites fav=userService.uploadLikes(favourites);
-            if(fav!=null)return new ResponseEntity<>(fav,HttpStatusCode.valueOf(200));
+            if(fav!=null){
+                map.put("message","Like added successfully");
+                return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
+            }
         }catch(Exception e){
             map.put("messsage",e.getMessage());
         }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
@@ -115,6 +118,22 @@ public class UserController {
             map.put("message",e.getMessage());
         }map.put("message","No users have liked this farmer.");
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
+
+    @GetMapping("/like/getLike")
+    public ResponseEntity<?> getLikeForFarmer(@RequestBody Favourites favourites){
+        Map<String,Object> map= new HashMap<>();
+        try{
+            boolean flag=userService.getLike(favourites);
+            if(flag){
+                return new ResponseEntity<>(flag,HttpStatusCode.valueOf(200));
+            }
+            return new ResponseEntity<>(flag,HttpStatusCode.valueOf(200));
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+        }
+        return new  ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
     @PostMapping("/like/deleteLike")

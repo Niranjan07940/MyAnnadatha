@@ -22,5 +22,5 @@ public interface FavouritesRepository extends JpaRepository<Favourites,Long> {
     int deleteByBuyerIdAndFarmerId(Long buyerId, Long farmerId);
 
 
-
+    boolean existsByBuyerIdAndFarmerId(Long id, Long id1);
 }
