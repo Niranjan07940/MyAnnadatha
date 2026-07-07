@@ -60,4 +60,6 @@ public interface CropDetailsRepository extends JpaRepository<CropDetails,Long> {
     Long countByUserId(Long userId);
 
     Page<CropDetails> getCropDetailsByUserId(Long farmerId, Pageable pageable);
+
+    CropDetails findCropDetailsById(Long cropDetailsId);
 }

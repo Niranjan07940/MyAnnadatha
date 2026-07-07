@@ -118,5 +118,21 @@ public class CropDetailsController {
             return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
         }
     }
+    @GetMapping("/crop/getCropById")
+    public ResponseEntity<?> getCropDetailsById(@RequestParam("cropDetailsId")Long cropDetailsId){
+        Map<String,Object> map= new HashMap<>();
+        try{
+            CropDetails cropDetails=cropDetailsService.getCrop(cropDetailsId);
+            if(cropDetails!=null){
+                return new ResponseEntity<>(cropDetails,HttpStatusCode.valueOf(200));
+            }
+            map.put("message","no crop details for this id");
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+        }
+        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
     
 }

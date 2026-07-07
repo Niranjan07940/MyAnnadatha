@@ -121,10 +121,10 @@ public class UserController {
     }
 
     @GetMapping("/like/getLike")
-    public ResponseEntity<?> getLikeForFarmer(@RequestBody Favourites favourites){
+    public ResponseEntity<?> getLikeForFarmer(@RequestParam("buyerId") Long buyerId,@RequestParam("farmerId") Long farmerId){
         Map<String,Object> map= new HashMap<>();
         try{
-            boolean flag=userService.getLike(favourites);
+            boolean flag=userService.getLike(buyerId,farmerId);
             if(flag){
                 return new ResponseEntity<>(flag,HttpStatusCode.valueOf(200));
             }
@@ -137,7 +137,7 @@ public class UserController {
     }
 
     @PostMapping("/like/deleteLike")
-    public ResponseEntity<?> disLike(@RequestParam Long buyerId,@RequestParam Long farmerId){
+    public ResponseEntity<?> disLike(@RequestParam("buyerId") Long buyerId,@RequestParam("farmerId") Long farmerId){
         Map<String,Object> map = new HashMap<>();
         try{
             userService.deleteLike(buyerId,farmerId);

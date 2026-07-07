@@ -140,7 +140,16 @@ public class UserService {
     }
 
     public Ratings addRating(Ratings ratings) {
-
+        Ratings oldRating=ratingsRepository.findByBuyerIdAndFarmerId(ratings.getBuyer().getId(),ratings.getFarmer().getId());
+        if(oldRating!=null){
+            User user=userRepository.findUserById(oldRating.getFarmer().getId());
+            if(user!=null){
+                user.setTotalRating(user.getTotalRating()+((ratings.getRating()-oldRating.getRating())/user.getCount()));
+                userRepository.save(user);
+            }
+            oldRating.setRating(ratings.getRating());
+            return ratingsRepository.save(oldRating);
+        }
         Ratings ratings1=ratingsRepository.save(ratings);
         User user=userRepository.findUserById(ratings.getFarmer().getId());
         user.setTotalRating(user.getTotalRating()+((ratings1.getRating()-user.getTotalRating())/
@@ -148,7 +157,6 @@ public class UserService {
         user.setCount(user.getCount()+1);
         userRepository.save(user);
         return ratings1;
-
     }
 
     public List<Ratings> getRatingsForUser(Long farmerId) {
@@ -164,7 +172,7 @@ public class UserService {
         return reviewsRepository.findAllByFarmerId(farmerId,pageable);
     }
 
-    public boolean getLike(Favourites favourites) {
-        return favouritesRepository.existsByBuyerIdAndFarmerId(favourites.getBuyer().getId(),favourites.getFarmer().getId());
+    public boolean getLike(Long buyerId,Long farmerId) {
+        return favouritesRepository.existsByBuyerIdAndFarmerId(buyerId,farmerId);
     }
 }

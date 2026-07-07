@@ -96,4 +96,8 @@ public class CropDetailsService {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         return cropDetailsRepository.getCropDetailsByUserId(farmerId, pageable);
     }
+
+    public CropDetails getCrop(Long cropDetailsId) {
+        return cropDetailsRepository.findCropDetailsById(cropDetailsId);
+    }
 }

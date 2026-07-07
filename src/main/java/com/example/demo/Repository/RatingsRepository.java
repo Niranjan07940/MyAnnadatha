@@ -10,4 +10,8 @@ import java.util.List;
 public interface RatingsRepository extends JpaRepository<Ratings, Long> {
 
     List<Ratings> findAllByFarmerId(Long farmerId);
+
+
+
+    Ratings findByBuyerIdAndFarmerId(Long id, Long id1);
 }
