@@ -94,6 +94,11 @@ public class UserService {
 
 
     public Favourites uploadLikes(Favourites favourites) {
+        User user=userRepository.findUserById(favourites.getFarmer().getId());
+        if(user!=null){
+            user.setFavouriteCount(user.getFavouriteCount()+1);
+            userRepository.save(user);
+        }
         return favouritesRepository.save(favourites);
 
     }
@@ -106,6 +111,11 @@ public class UserService {
 
     @Transactional
     public void deleteLike(Long buyerId, Long farmerId) {
+        User user=userRepository.findUserById(farmerId);
+        if(user!=null){
+            user.setFavouriteCount(user.getFavouriteCount()-1);
+            userRepository.save(user);
+        }
         int count=favouritesRepository.deleteByBuyerIdAndFarmerId(buyerId, farmerId);
     }
 
@@ -174,5 +184,10 @@ public class UserService {
 
     public boolean getLike(Long buyerId,Long farmerId) {
         return favouritesRepository.existsByBuyerIdAndFarmerId(buyerId,farmerId);
+    }
+
+    public Integer getCount(Long farmerId) {
+        User user=userRepository.findUserById(farmerId);
+        return user.getFavouriteCount();
     }
 }

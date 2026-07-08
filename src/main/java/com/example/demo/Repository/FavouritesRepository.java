@@ -23,4 +23,6 @@ public interface FavouritesRepository extends JpaRepository<Favourites,Long> {
 
 
     boolean existsByBuyerIdAndFarmerId(Long id, Long id1);
+
+    Integer getCountByFarmerId(Long farmerId);
 }

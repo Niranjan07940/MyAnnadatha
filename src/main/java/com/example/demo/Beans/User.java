@@ -23,7 +23,7 @@ public class User{
     @NotNull
     private String username;
     @Email
-    @NotNull
+    @Column(unique = true,nullable = false)
     private String email;
     @JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -34,6 +34,8 @@ public class User{
     private Double totalRating=0.0;
 
     private Integer count=0;
+
+    private Integer favouriteCount=0;
 
     @CreationTimestamp
     @Column(updatable = false)

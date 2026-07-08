@@ -1,17 +1,19 @@
 package com.example.demo.Beans;
 
+import com.example.demo.Enum.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
-public class CropDetails {
+public class DeletedCropDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
@@ -35,5 +37,7 @@ public class CropDetails {
     @ManyToOne
     @JoinColumn(name="cropLocation_id")
     private CropLocation cropLocation;
-}
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+}

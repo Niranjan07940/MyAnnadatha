@@ -120,6 +120,19 @@ public class UserController {
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
+    @GetMapping("/like/getLikesCount")
+    public ResponseEntity<?> getFavouriteCount(@RequestParam("farmerId") Long farmerId){
+        Map<String,Object> map= new HashMap<>();
+        try{
+            Integer count=userService.getCount(farmerId);
+            return new ResponseEntity<>(count,HttpStatusCode.valueOf(200));
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+        }
+       return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
+
     @GetMapping("/like/getLike")
     public ResponseEntity<?> getLikeForFarmer(@RequestParam("buyerId") Long buyerId,@RequestParam("farmerId") Long farmerId){
         Map<String,Object> map= new HashMap<>();
@@ -185,7 +198,11 @@ public class UserController {
         Map<String,Object> map = new HashMap<>();
         try{
             Page<Reviews> reviews=userService.getReviews(farmerId,page);
-            if(!reviews.isEmpty())return new ResponseEntity<>(reviews,HttpStatusCode.valueOf(200));
+            if(!reviews.isEmpty()){
+                return new ResponseEntity<>(reviews,HttpStatusCode.valueOf(200));
+            }
+            map.put("message","no reviews yet for you");
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
         }
         catch(Exception e){
             map.put("message",e.getMessage());
