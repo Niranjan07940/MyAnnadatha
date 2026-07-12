@@ -66,7 +66,7 @@ public class UserController {
         return userService.updatePassword(updatePassword);
     }
 
-    @PostMapping("/user/getUser")
+    @GetMapping("/user/getUser")
     public ResponseEntity<?> getProfile(@RequestParam("id") Long id){
         Map<String, Object> map = new HashMap<>();
         Optional<?> user=userService.getUser(id);

@@ -5,6 +5,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.example.demo.Beans.*;
 import com.example.demo.DTO.CropRequest;
 import com.example.demo.DTO.NearbyCropResponse;
+import com.example.demo.Enum.CropDetailsStatus;
 import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,12 +63,8 @@ public class CropDetailsService {
     }
 
     public Page<CropDetails> getCrops(int page, int size) {
-        Pageable pageable = PageRequest.of(
-                page,
-                size,
-                Sort.by(Sort.Direction.DESC, "id")
-        );
-        return cropDetailsRepository.findAll(pageable);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        return cropDetailsRepository.findByCropDetailsStatus(CropDetailsStatus.WAITING,pageable);
     }
 
     public List<NearbyCropResponse> getNearByCrops(Double latitude, Double longitude, Double radius) {

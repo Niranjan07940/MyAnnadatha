@@ -51,7 +51,6 @@ public class CropDetailsController {
     @GetMapping("/crop/nearBy")
     public ResponseEntity<?> getNearByCrops(@RequestParam("latitude") Double latitude, @RequestParam("longitude") Double longitude, @RequestParam(defaultValue = "60") Double radius){
         Map<String,Object> map=new HashMap<>();
-        System.out.println("latitude: "+" "+latitude+" "+"longitude: "+" "+longitude);
         try{
             List<NearbyCropResponse> list=cropDetailsService.getNearByCrops(latitude,longitude,radius);
             if(list.isEmpty()){

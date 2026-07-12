@@ -1,5 +1,8 @@
 package com.example.demo.Beans;
 
+import com.example.demo.Enum.CropDetailsStatus;
+import com.example.demo.Enum.NegotiationStatus;
+import com.example.demo.Enum.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,5 +38,16 @@ public class CropDetails {
     @ManyToOne
     @JoinColumn(name="cropLocation_id")
     private CropLocation cropLocation;
+
+    @Enumerated(EnumType.STRING)
+    private CropDetailsStatus cropDetailsStatus;
+
+    @PrePersist
+    private void onCreate(){
+        if(cropDetailsStatus==null){
+            cropDetailsStatus= CropDetailsStatus.WAITING;
+        }
+    }
+
 }
 

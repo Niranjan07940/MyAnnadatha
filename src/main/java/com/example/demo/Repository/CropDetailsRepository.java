@@ -1,6 +1,7 @@
 package com.example.demo.Repository;
 
 import com.example.demo.Beans.CropDetails;
+import com.example.demo.Enum.CropDetailsStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -62,4 +63,6 @@ public interface CropDetailsRepository extends JpaRepository<CropDetails,Long> {
     Page<CropDetails> getCropDetailsByUserId(Long farmerId, Pageable pageable);
 
     CropDetails findCropDetailsById(Long cropDetailsId);
+
+    Page<CropDetails> findByCropDetailsStatus(CropDetailsStatus cropDetailsStatus,Pageable pageable);
 }
