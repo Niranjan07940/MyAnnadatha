@@ -4,10 +4,9 @@ import com.example.demo.Beans.CropDetails;
 import com.example.demo.Beans.CropNegotiationAccepted;
 import com.example.demo.Beans.Orders;
 import com.example.demo.Enum.CropDetailsStatus;
-import com.example.demo.Enum.OrderStatus;
 import com.example.demo.Repository.CropDetailsRepository;
 import com.example.demo.Repository.CropNegotiationAcceptedRepository;
-import com.example.demo.Repository.OrdersRepository;
+import com.example.demo.Repository.CropOrdersRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class OrdersService {
 
     @Autowired
-    private OrdersRepository ordersRepository;
+    private CropOrdersRepository ordersRepository;
 
     @Autowired
     private CropDetailsRepository cropDetailsRepository;
@@ -29,18 +28,6 @@ public class OrdersService {
     private CropNegotiationAcceptedRepository cropNegotiationAcceptedRepository;
 
 
-    @Transactional
-    public Orders placeOrder(Orders order){
-
-        order.setOrderStatus(OrderStatus.ORDERED);
-
-        CropDetails cropDetails=cropDetailsRepository.findCropDetailsById(order.getCropDetails().getId());
-        cropDetails.setCropDetailsStatus(CropDetailsStatus.CROP_ACCEPTED);
-        cropDetailsRepository.save(cropDetails);
-
-        return ordersRepository.save(order);
-    }
-
     public Page<Orders> getAllOrders(Long userId, int page) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         return ordersRepository.findAllOrdersByBuyerId(userId,pageable);
@@ -48,6 +35,7 @@ public class OrdersService {
 
     @Transactional
     public Orders deleteOrder(Long orderId) {
+        //TODO RESTRICTION FOR ORDER DELETION IN TIME 10 HRS BEFORE DELIVERY
         Orders order = ordersRepository.findOrderById(orderId);
         CropDetails cropDetails=order.getCropDetails();
         if(cropDetails!=null){

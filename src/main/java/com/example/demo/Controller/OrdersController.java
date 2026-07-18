@@ -1,13 +1,11 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Beans.Orders;
-import com.example.demo.Repository.OrdersRepository;
 import com.example.demo.Service.OrdersService;
 import com.example.demo.Utility.JwtUtility;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +44,7 @@ public class OrdersController {
     }
 
     @PostMapping("/order/deleteOrder")
-    public ResponseEntity<?> deleteOrder(@RequestParam("orderId") Long  orderId){
+    public ResponseEntity<?> deleteOrder(@RequestParam("orderId") Long orderId){
         Map<String,Object> map = new HashMap<>();
         try{
             Orders deleteOrder=ordersService.deleteOrder(orderId);

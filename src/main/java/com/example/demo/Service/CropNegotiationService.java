@@ -29,7 +29,7 @@ public class CropNegotiationService {
 
 
     @Autowired
-    private OrdersRepository ordersRepository;
+    private CropOrdersRepository ordersRepository;
 
 
     public CropNegotiationRequest createRequest(CropNegotiationRequest cropNegotiationRequest) {
