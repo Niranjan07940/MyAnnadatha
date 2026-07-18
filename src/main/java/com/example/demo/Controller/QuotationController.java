@@ -115,6 +115,7 @@ public class QuotationController {
                 return new ResponseEntity<>(acceptedQuotations,HttpStatusCode.valueOf(200));
             }
             map.put("message","no accepted quotations yet");
+            return  new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
         }
         catch(Exception e){
             map.put("message",e.getMessage());

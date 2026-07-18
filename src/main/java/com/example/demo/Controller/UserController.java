@@ -114,10 +114,11 @@ public class UserController {
         try{
             Page<Favourites> favourites=userService.getAllLikedUsers(farmerId,page,10);
             if(!favourites.isEmpty())return new ResponseEntity<>(favourites,HttpStatusCode.valueOf(200));
+            map.put("message","No users have liked this farmer.");
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
         }catch(Exception e){
             map.put("message",e.getMessage());
-        }map.put("message","No users have liked this farmer.");
-        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+        }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
     @GetMapping("/like/getLikesCount")
