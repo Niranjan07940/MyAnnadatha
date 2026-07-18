@@ -46,10 +46,13 @@ public class OrdersService {
         return ordersRepository.findAllOrdersByBuyerId(userId,pageable);
     }
 
+    @Transactional
     public Orders deleteOrder(Long orderId) {
-        CropDetails cropDetails=cropDetailsRepository.findCropDetailsById(orderId);
-        if(cropDetails!=null){
+        Orders order = ordersRepository.findById(orderId).orElse(null);
+        if((order != null ? order.getCropDetails() : null) !=null){
+            CropDetails cropDetails = order.getCropDetails();
             cropDetails.setCropDetailsStatus(CropDetailsStatus.WAITING);
+            cropDetailsRepository.save(cropDetails);
             CropNegotiationAccepted cropNegotiationAccepted=cropNegotiationAcceptedRepository.findByCropDetailsId(cropDetails.getId());
             if(cropNegotiationAccepted!=null){
                 cropNegotiationAcceptedRepository.delete(cropNegotiationAccepted);
