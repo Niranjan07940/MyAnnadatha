@@ -3,6 +3,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Beans.*;
 import com.example.demo.Enum.CropDetailsStatus;
+import com.example.demo.Enum.OrderStatus;
 import com.example.demo.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,10 @@ public class CropNegotiationService {
 
     @Autowired
     private CropNegotiationAcceptedRepository  cropNegotiationAcceptedRepository;
+
+
+    @Autowired
+    private OrdersRepository ordersRepository;
 
 
     public CropNegotiationRequest createRequest(CropNegotiationRequest cropNegotiationRequest) {
@@ -70,7 +75,13 @@ public class CropNegotiationService {
             cropDetails.setCropDetailsStatus(CropDetailsStatus.CROP_ACCEPTED);
             cropDetailsRepository.save(cropDetails);
         }
-        return cropNegotiationAcceptedRepository.save(cropNegotiationAccepted);
+        CropNegotiationAccepted cropNegotiationAccepted1=cropNegotiationAcceptedRepository.save(cropNegotiationAccepted);
+        Orders order= new Orders();
+        order.setCropDetails(cropNegotiationAccepted.getCropDetails());
+        order.setBuyer(cropNegotiationAccepted.getBuyer());
+        order.setOrderStatus(OrderStatus.ORDERED);
+        ordersRepository.save(order);
+        return cropNegotiationAccepted1;
     }
 
     public CropNegotiationAccepted getAllAcceptedCropDetails(Long cropDetailsId) {
