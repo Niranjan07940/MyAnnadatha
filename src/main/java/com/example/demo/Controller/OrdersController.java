@@ -57,7 +57,6 @@ public class OrdersController {
             return new ResponseEntity<>(map,HttpStatus.OK);
         }
         catch(Exception e){
-            System.out.println("Error:"+e.getMessage());
             map.put("message",e.getMessage());
         }
         return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));

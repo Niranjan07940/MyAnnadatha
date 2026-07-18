@@ -48,9 +48,9 @@ public class OrdersService {
 
     @Transactional
     public Orders deleteOrder(Long orderId) {
-        Orders order = ordersRepository.findById(orderId).orElse(null);
-        if((order != null ? order.getCropDetails() : null) !=null){
-            CropDetails cropDetails = order.getCropDetails();
+        Orders order = ordersRepository.findOrderById(orderId);
+        CropDetails cropDetails=order.getCropDetails();
+        if(cropDetails!=null){
             cropDetails.setCropDetailsStatus(CropDetailsStatus.WAITING);
             cropDetailsRepository.save(cropDetails);
             CropNegotiationAccepted cropNegotiationAccepted=cropNegotiationAcceptedRepository.findByCropDetailsId(cropDetails.getId());
