@@ -79,7 +79,7 @@ public class CropNegotiationService {
         Orders order= new Orders();
         order.setCropDetails(cropNegotiationAccepted.getCropDetails());
         order.setBuyer(cropNegotiationAccepted.getBuyer());
-        order.setOrderStatus(OrderStatus.ORDERED);
+        order.setOrderStatus(OrderStatus.ACCEPTED);
         ordersRepository.save(order);
         return cropNegotiationAccepted1;
     }

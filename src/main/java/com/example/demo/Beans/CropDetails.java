@@ -1,8 +1,6 @@
 package com.example.demo.Beans;
 
 import com.example.demo.Enum.CropDetailsStatus;
-import com.example.demo.Enum.NegotiationStatus;
-import com.example.demo.Enum.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

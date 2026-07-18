@@ -47,7 +47,7 @@ public class OrdersController {
     public ResponseEntity<?> deleteOrder(@RequestParam("orderId") Long orderId){
         Map<String,Object> map = new HashMap<>();
         try{
-            Orders deleteOrder=ordersService.deleteOrder(orderId);
+            Orders deleteOrder=ordersService.cancleOrder(orderId);
             if(deleteOrder!=null){
                 return new ResponseEntity<>(deleteOrder,HttpStatus.OK);
             }

@@ -4,6 +4,7 @@ import com.example.demo.Beans.CropDetails;
 import com.example.demo.Beans.CropNegotiationAccepted;
 import com.example.demo.Beans.Orders;
 import com.example.demo.Enum.CropDetailsStatus;
+import com.example.demo.Enum.OrderStatus;
 import com.example.demo.Repository.CropDetailsRepository;
 import com.example.demo.Repository.CropNegotiationAcceptedRepository;
 import com.example.demo.Repository.CropOrdersRepository;
@@ -34,7 +35,7 @@ public class OrdersService {
     }
 
     @Transactional
-    public Orders deleteOrder(Long orderId) {
+    public Orders cancleOrder(Long orderId) {
         //TODO RESTRICTION FOR ORDER DELETION IN TIME 10 HRS BEFORE DELIVERY
         Orders order = ordersRepository.findOrderById(orderId);
         CropDetails cropDetails=order.getCropDetails();
@@ -46,6 +47,7 @@ public class OrdersService {
                 cropNegotiationAcceptedRepository.delete(cropNegotiationAccepted);
             }
         }
-        return ordersRepository.deleteOrdersById(orderId);
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        return ordersRepository.save(order);
     }
 }
