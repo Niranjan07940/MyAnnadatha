@@ -6,6 +6,8 @@ import com.example.demo.DTO.CropOrdered;
 import com.example.demo.Enum.CropDetailsStatus;
 import com.example.demo.Enum.OrderStatus;
 import com.example.demo.Repository.*;
+import com.example.demo.Utility.JwtUtility;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,9 @@ public class CropNegotiationService {
     private CropNegotiationRepository  cropNegotiationRepository;
 
     @Autowired
+    private JwtUtility  jwtUtility;
+
+    @Autowired
     private CropNegotiationResponseRepository cropNegotiationResponseRepository;
 
     @Autowired
@@ -27,6 +32,9 @@ public class CropNegotiationService {
 
     @Autowired
     private CropNegotiationAcceptedRepository  cropNegotiationAcceptedRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Autowired
@@ -72,7 +80,8 @@ public class CropNegotiationService {
         return cropNegotiationRepository.findCropNegotiationsByCropDetailsId(cropDetailsId,pageable);
     }
 
-    public CropNegotiationAccepted acceptNegotiation(CropOrdered cropOrdered) {
+    public CropNegotiationAccepted acceptNegotiation(CropOrdered cropOrdered, HttpServletRequest request) {
+        Long userId=jwtUtility.getUserId(request.getHeader("Authorization").substring(7));
         CropDetails cropDetails=cropDetailsRepository.findCropDetailsById(cropOrdered.getCropNegotiationAccepted().getCropDetails().getId());
         if(cropDetails!=null){
             cropDetails.setCropDetailsStatus(CropDetailsStatus.CROP_ACCEPTED);
@@ -85,6 +94,7 @@ public class CropNegotiationService {
         order.setOrderStatus(OrderStatus.ACCEPTED);
         DeliveryAddress deliveryAddress=deliveryAddressRepository.findDeliveryAddressesById(cropOrdered.getDeliveryAddressId());
         if(deliveryAddress!=null){
+            deliveryAddress.setUser(userRepository.findUserById(userId));
             order.setDeliveryAddress(deliveryAddress);
             ordersRepository.save(order);
         }

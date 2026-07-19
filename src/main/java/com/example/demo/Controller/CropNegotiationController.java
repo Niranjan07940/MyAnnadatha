@@ -112,6 +112,8 @@ public class CropNegotiationController {
             if(cropNegotiationAccepted1!=null){
                 return new ResponseEntity<>(cropNegotiationAccepted1, HttpStatus.OK);
             }
+            map.put("message","no accepted negotiations");
+            return new ResponseEntity<>(map,HttpStatus.OK);
         }
         catch(Exception e){
             map.put("message",e.getMessage());
