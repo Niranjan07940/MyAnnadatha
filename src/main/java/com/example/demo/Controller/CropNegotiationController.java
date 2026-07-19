@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 import com.example.demo.Beans.CropNegotiationAccepted;
 import com.example.demo.Beans.CropNegotiationRequest;
 import com.example.demo.Beans.CropNegotiationResponse;
+import com.example.demo.DTO.CropOrdered;
 import com.example.demo.Service.CropNegotiationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -104,10 +105,10 @@ public class CropNegotiationController {
     }
 
     @PostMapping("/negotiationRequest/acceptNegotiation")
-    public ResponseEntity<?> acceptCropNegotiation(@RequestBody CropNegotiationAccepted cropNegotiationAccepted){
+    public ResponseEntity<?> acceptCropNegotiation(@RequestBody CropOrdered cropOrdered){
         Map<String,Object> map = new HashMap<>();
         try{
-            CropNegotiationAccepted cropNegotiationAccepted1=cropNegotiationService.acceptNegotiation(cropNegotiationAccepted);
+            CropNegotiationAccepted cropNegotiationAccepted1=cropNegotiationService.acceptNegotiation(cropOrdered);
             if(cropNegotiationAccepted1!=null){
                 return new ResponseEntity<>(cropNegotiationAccepted1, HttpStatus.OK);
             }

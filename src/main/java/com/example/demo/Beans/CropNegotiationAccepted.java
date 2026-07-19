@@ -27,6 +27,8 @@ public class CropNegotiationAccepted {
     @JoinColumn(name="cropDetailsId")
     private CropDetails cropDetails;
 
+
+
     @CreationTimestamp
     @Column(updatable = false)
     private Timestamp createdAt;

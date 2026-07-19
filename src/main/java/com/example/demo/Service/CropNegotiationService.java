@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 
 import com.example.demo.Beans.*;
+import com.example.demo.DTO.CropOrdered;
 import com.example.demo.Enum.CropDetailsStatus;
 import com.example.demo.Enum.OrderStatus;
 import com.example.demo.Repository.*;
@@ -69,17 +70,18 @@ public class CropNegotiationService {
         return cropNegotiationRepository.findCropNegotiationsByCropDetailsId(cropDetailsId,pageable);
     }
 
-    public CropNegotiationAccepted acceptNegotiation(CropNegotiationAccepted cropNegotiationAccepted) {
-        CropDetails cropDetails=cropDetailsRepository.findCropDetailsById(cropNegotiationAccepted.getCropDetails().getId());
+    public CropNegotiationAccepted acceptNegotiation(CropOrdered cropOrdered) {
+        CropDetails cropDetails=cropDetailsRepository.findCropDetailsById(cropOrdered.getCropNegotiationAccepted().getCropDetails().getId());
         if(cropDetails!=null){
             cropDetails.setCropDetailsStatus(CropDetailsStatus.CROP_ACCEPTED);
             cropDetailsRepository.save(cropDetails);
         }
-        CropNegotiationAccepted cropNegotiationAccepted1=cropNegotiationAcceptedRepository.save(cropNegotiationAccepted);
+        CropNegotiationAccepted cropNegotiationAccepted1=cropNegotiationAcceptedRepository.save(cropOrdered.getCropNegotiationAccepted());
         Orders order= new Orders();
-        order.setCropDetails(cropNegotiationAccepted.getCropDetails());
-        order.setBuyer(cropNegotiationAccepted.getBuyer());
+        order.setCropDetails(cropOrdered.getCropNegotiationAccepted().getCropDetails());
+        order.setBuyer(cropOrdered.getCropNegotiationAccepted().getBuyer());
         order.setOrderStatus(OrderStatus.ACCEPTED);
+        order.setDeliveryAddress(cropOrdered.getDeliveryAddress());
         ordersRepository.save(order);
         return cropNegotiationAccepted1;
     }

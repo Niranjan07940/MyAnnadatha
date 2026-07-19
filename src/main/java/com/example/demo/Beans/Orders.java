@@ -29,6 +29,10 @@ public class Orders {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+    @ManyToOne
+    @JoinColumn(name="deliveryAddressId")
+    private DeliveryAddress deliveryAddress;
+
     @CreationTimestamp
     @Column(updatable = false)
     private Timestamp createdAt;
