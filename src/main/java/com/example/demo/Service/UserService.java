@@ -2,15 +2,9 @@ package com.example.demo.Service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.example.demo.Beans.Favourites;
-import com.example.demo.Beans.Ratings;
-import com.example.demo.Beans.Reviews;
-import com.example.demo.Beans.User;
+import com.example.demo.Beans.*;
 import com.example.demo.DTO.UpdatePassword;
-import com.example.demo.Repository.FavouritesRepository;
-import com.example.demo.Repository.RatingsRepository;
-import com.example.demo.Repository.ReviewsRepository;
-import com.example.demo.Repository.UserRepository;
+import com.example.demo.Repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -52,6 +46,9 @@ public class UserService {
 
     @Autowired
     private ReviewsRepository reviewsRepository;
+
+    @Autowired
+    private DeliveryAddressRepository deliveryAddressRepository;
 
 
     public User register(User user) {
@@ -189,5 +186,17 @@ public class UserService {
     public Integer getCount(Long farmerId) {
         User user=userRepository.findUserById(farmerId);
         return user.getFavouriteCount();
+    }
+
+    public List<DeliveryAddress> getAddresses(Long userId) {
+        return deliveryAddressRepository.findDeliveryAddressByUserId(userId);
+    }
+
+    public DeliveryAddress addAddress(DeliveryAddress deliveryAddress) {
+        return deliveryAddressRepository.save(deliveryAddress);
+    }
+
+    public DeliveryAddress deleteAddress(Long addressId) {
+        return deliveryAddressRepository.deleteDeliveryAddressById(addressId);
     }
 }

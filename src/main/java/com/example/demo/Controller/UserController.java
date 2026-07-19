@@ -1,9 +1,6 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Beans.Favourites;
-import com.example.demo.Beans.Ratings;
-import com.example.demo.Beans.Reviews;
-import com.example.demo.Beans.User;
+import com.example.demo.Beans.*;
 import com.example.demo.DTO.UpdatePassword;
 import com.example.demo.Service.UserService;
 import com.example.demo.Utility.JwtUtility;
@@ -216,6 +213,59 @@ public class UserController {
         List<Ratings> ratings=userService.getRatingsForUser(farmerId);
         return new ResponseEntity<>(ratings,HttpStatusCode.valueOf(200));
 
+    }
+
+    @PostMapping("/delivery/addAddress")
+    public ResponseEntity<?> addDeliveryAddress(@RequestBody DeliveryAddress deliveryAddress){
+        Map<String,Object> map = new HashMap<>();
+        try{
+            DeliveryAddress deliveryAddress1=userService.addAddress(deliveryAddress);
+            if(deliveryAddress1!=null){
+                return new  ResponseEntity<>(deliveryAddress1,HttpStatusCode.valueOf(200));
+            }
+            map.put("message","add your delivery address");
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+        }
+        return new  ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+
+    }
+
+    @GetMapping("/delivery/getAddresses")
+    public ResponseEntity<?> getYourDeliveryAddresses(HttpServletRequest request){
+        Map<String,Object> map = new HashMap<>();
+        Long userId=jwtUtility.getUserId(request.getHeader("Authorization").substring(7));
+        try{
+            List<DeliveryAddress> addresses=userService.getAddresses(userId);
+            if(!addresses.isEmpty()){
+                return new ResponseEntity<>(addresses,HttpStatusCode.valueOf(200));
+            }
+            map.put("message","no delivery addresses yet for you");
+            return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+        }
+        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
+    }
+
+    @PostMapping("/delivery/deleteAddress")
+    public ResponseEntity<?> deleteAddress(@RequestParam("addressId") Long addressId){
+        Map<String,Object> map = new HashMap<>();
+        try{
+           DeliveryAddress deliveryAddress=userService.deleteAddress(addressId);
+           if(deliveryAddress!=null){
+               return new ResponseEntity<>(deliveryAddress,HttpStatusCode.valueOf(200));
+           }
+           map.put("message","no addresses found");
+           return new  ResponseEntity<>(map,HttpStatusCode.valueOf(200));
+        }
+        catch(Exception e){
+            map.put("message",e.getMessage());
+        }
+        return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 
 
