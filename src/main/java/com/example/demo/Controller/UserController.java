@@ -27,6 +27,8 @@ public class UserController {
     @Autowired
     private JwtUtility jwtUtility;
 
+
+
     @PostMapping("/user/updateWithProfile")
     public ResponseEntity<?> updateProfile(@ModelAttribute User user, @RequestPart("file") MultipartFile file) throws Exception{
         User u=userService.getUserByEmail(user.getEmail());
@@ -216,8 +218,11 @@ public class UserController {
     }
 
     @PostMapping("/delivery/addAddress")
-    public ResponseEntity<?> addDeliveryAddress(@RequestBody DeliveryAddress deliveryAddress){
+    public ResponseEntity<?> addDeliveryAddress(@RequestBody DeliveryAddress deliveryAddress,HttpServletRequest request){
         Map<String,Object> map = new HashMap<>();
+        Long userId=jwtUtility.getUserId(request.getHeader("Authorization").substring(7));
+        User user=userService.getUserDetails(userId);
+        deliveryAddress.setUser(user);
         try{
             DeliveryAddress deliveryAddress1=userService.addAddress(deliveryAddress);
             if(deliveryAddress1!=null){

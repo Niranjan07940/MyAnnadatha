@@ -80,8 +80,7 @@ public class CropNegotiationService {
         return cropNegotiationRepository.findCropNegotiationsByCropDetailsId(cropDetailsId,pageable);
     }
 
-    public CropNegotiationAccepted acceptNegotiation(CropOrdered cropOrdered, HttpServletRequest request) {
-        Long userId=jwtUtility.getUserId(request.getHeader("Authorization").substring(7));
+    public CropNegotiationAccepted acceptNegotiation(CropOrdered cropOrdered) {
         CropDetails cropDetails=cropDetailsRepository.findCropDetailsById(cropOrdered.getCropNegotiationAccepted().getCropDetails().getId());
         if(cropDetails!=null){
             cropDetails.setCropDetailsStatus(CropDetailsStatus.CROP_ACCEPTED);
@@ -94,7 +93,7 @@ public class CropNegotiationService {
         order.setOrderStatus(OrderStatus.ACCEPTED);
         DeliveryAddress deliveryAddress=deliveryAddressRepository.findDeliveryAddressesById(cropOrdered.getDeliveryAddressId());
         if(deliveryAddress!=null){
-            deliveryAddress.setUser(userRepository.findUserById(userId));
+
             order.setDeliveryAddress(deliveryAddress);
             ordersRepository.save(order);
         }
