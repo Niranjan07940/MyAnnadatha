@@ -31,6 +31,8 @@ public class CropNegotiationService {
 
     @Autowired
     private CropOrdersRepository ordersRepository;
+    @Autowired
+    private DeliveryAddressRepository deliveryAddressRepository;
 
 
     public CropNegotiationRequest createRequest(CropNegotiationRequest cropNegotiationRequest) {
@@ -81,8 +83,11 @@ public class CropNegotiationService {
         order.setCropDetails(cropOrdered.getCropNegotiationAccepted().getCropDetails());
         order.setBuyer(cropOrdered.getCropNegotiationAccepted().getBuyer());
         order.setOrderStatus(OrderStatus.ACCEPTED);
-        order.setDeliveryAddress(cropOrdered.getDeliveryAddress());
-        ordersRepository.save(order);
+        DeliveryAddress deliveryAddress=deliveryAddressRepository.findDeliveryAddressesById(cropOrdered.getDeliveryAddressId());
+        if(deliveryAddress!=null){
+            order.setDeliveryAddress(deliveryAddress);
+            ordersRepository.save(order);
+        }
         return cropNegotiationAccepted1;
     }
 

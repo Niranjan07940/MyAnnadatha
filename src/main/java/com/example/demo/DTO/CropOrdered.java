@@ -9,5 +9,5 @@ public class CropOrdered {
 
     private CropNegotiationAccepted cropNegotiationAccepted;
 
-    private DeliveryAddress deliveryAddress;
+    private Long deliveryAddressId;
 }
