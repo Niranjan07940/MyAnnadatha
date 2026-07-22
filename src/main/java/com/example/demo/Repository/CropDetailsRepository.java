@@ -38,6 +38,10 @@ public interface CropDetailsRepository extends JpaRepository<CropDetails,Long> {
                        * sin(radians(cl.latitude))
                    )
                ) <= :radius
+          AND c.cropDetailsStatus IN (
+                com.example.demo.Enum.CropDetailsStatus.WAITING,
+                com.example.demo.Enum.CropDetailsStatus.UNDER_NEGOTIATION
+          )
         ORDER BY (
                    6371 * acos(
                        cos(radians(:latitude))
