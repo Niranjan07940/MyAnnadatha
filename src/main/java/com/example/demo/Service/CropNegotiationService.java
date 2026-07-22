@@ -93,7 +93,6 @@ public class CropNegotiationService {
         order.setOrderStatus(OrderStatus.ACCEPTED);
         DeliveryAddress deliveryAddress=deliveryAddressRepository.findDeliveryAddressesById(cropOrdered.getDeliveryAddressId());
         if(deliveryAddress!=null){
-
             order.setDeliveryAddress(deliveryAddress);
             ordersRepository.save(order);
         }

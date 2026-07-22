@@ -103,7 +103,7 @@ public class UserController {
                 return new ResponseEntity<>(map,HttpStatusCode.valueOf(200));
             }
         }catch(Exception e){
-            map.put("messsage",e.getMessage());
+            map.put("message",e.getMessage());
         }return new ResponseEntity<>(map,HttpStatusCode.valueOf(400));
     }
 

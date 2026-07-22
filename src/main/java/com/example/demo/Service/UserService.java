@@ -196,6 +196,7 @@ public class UserService {
         return deliveryAddressRepository.save(deliveryAddress);
     }
 
+    @Transactional
     public DeliveryAddress deleteAddress(Long addressId) {
         return deliveryAddressRepository.deleteDeliveryAddressById(addressId);
     }
